@@ -1,0 +1,42 @@
+- if exams.empty?
+  .alert.alert-info = t('no_exams_found')
+- else
+  .table-responsive
+    table.table.table-hover.table-striped
+      thead
+        tr
+          th = Exam.human_attribute_name(:title)
+          th = Exam.human_attribute_name(:start_date)
+          th = Exam.human_attribute_name(:end_date)
+          - if current_user.student?
+            th = t('messages.status')
+          th = t('actions.name')
+
+      tbody
+        - exams.each do |exam|
+          - user_exam = exam.user_exams.find_by(user: current_user)
+          tr
+            td = link_to exam.title, exam_path(exam)
+            td = exam.start_date.strftime("%d/%m/%Y %H:%M")
+            td = exam.end_date.strftime("%d/%m/%Y %H:%M")
+            - if current_user.student?
+              td
+                - if user_exam&.completed_at.present?
+                  span.badge.bg-success = t('activerecord.user_exam.attributes.status_badge.completed')
+                - elsif exam.available_now?
+                  span.badge.bg-warning.text-dark = t('activerecord.user_exam.attributes.status_badge.available')
+                - elsif exam.end_date < Time.current
+                  span.badge.bg-secondary = t('activerecord.user_exam.attributes.status_badge.ended')
+                - else
+                  span.badge.bg-info = t('activerecord.user_exam.attributes.status_badge.not_yet_available')
+            td
+              - if current_user.admin?
+                = link_to t('actions.edit'), edit_exam_path(exam), class: "btn btn-warning btn-sm me-2"
+                = link_to t('actions.delete'), exam_path(exam), data: { "turbo-method": :delete, turbo_confirm: t('delete_exam_confirmation') }, class: "btn btn-danger btn-sm"
+              - else
+                - if exam.available_now?
+                  - if user_exam&.completed_at.present?
+                    = link_to t('activerecord.messages.exam.view_my_results'), user_exam_path(user_exam), class: "btn btn-info btn-sm"
+                  - elsif exam.available_now?
+                    = link_to t('activerecord.messages.exam.take_exam'), new_exam_user_exam_path(exam), class: "btn btn-primary btn-sm"
+  = will_paginate exams

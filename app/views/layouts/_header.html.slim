@@ -1,0 +1,25 @@
+/ app/views/layouts/_navbar.html.slim (or wherever your navbar is)
+nav.navbar.navbar-expand-lg.navbar-light.bg-light
+  .container-fluid
+    - if user_signed_in?
+      = link_to t('navigation.home'), root_path, class: 'navbar-brand'
+      ul.navbar-nav
+        li.nav-item
+          = link_to t('navigation.exams'), exams_path, class: 'nav-link'
+        - if current_user.admin?
+          li.nav-item
+            = link_to t('navigation.analytics'), analytics_path, class: 'nav-link'
+
+      ul.navbar-nav.ms-auto
+        li.nav-item.dropdown
+          a.nav-link.dropdown-toggle href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+            = current_user.email
+          ul.dropdown-menu.dropdown-menu-end aria-labelledby="userDropdown"
+            li
+              = link_to t('navigation.logout'), destroy_user_session_path, method: :delete, class: 'dropdown-item'
+    - else
+      ul.navbar-nav.ms-auto
+        li.nav-item
+          = link_to t('navigation.login'), new_user_session_path, class: 'nav-link'
+        li.nav-item
+          = link_to t('navigation.sign_up'), new_user_registration_path, class: 'nav-link'

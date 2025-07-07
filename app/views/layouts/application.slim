@@ -1,0 +1,31 @@
+doctype html
+/ app/views/layouts/application.html.slim
+html
+  head
+    title = content_for(:title) || "Power Solutions Technical Test"
+    meta name="viewport" content="width=device-width,initial-scale=1"
+    meta name="apple-mobile-web-app-capable" content="yes"
+    meta name="mobile-web-app-capable" content="yes"
+    = csrf_meta_tags
+    = csp_meta_tag
+
+    = yield :head
+
+    link rel="icon" href="/icon.png" type="image/png"
+    link rel="icon" href="/icon.svg" type="image/svg+xml"
+    link rel="apple-touch-icon" href="/icon.png"
+
+    = stylesheet_link_tag :application, "data-turbo-track": "reload"
+    link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    = javascript_include_tag "application", "data-turbo-track": "reload", type: "module"
+
+  body
+    = render partial: "layouts/header"
+
+    .main-content-wrapper
+      - menu_partial_path = "#{controller_path}/menu"
+      - if lookup_context.template_exists?(menu_partial_path, [], true)
+        aside.left-menu
+          = render partial: menu_partial_path
+      .content-area
+        = yield

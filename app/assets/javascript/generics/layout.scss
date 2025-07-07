@@ -1,0 +1,40 @@
+
+
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+body > header {
+  flex-shrink: 0;
+}
+
+.main-content-wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  overflow: hidden;
+}
+
+.left-menu {
+  flex-shrink: 0;
+  width: 250px;
+  background-color: #f8f9fa;
+  border-right: 1px solid #dee2e6;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-area {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.error {
+  color: #dc3545;
+}

@@ -1,0 +1,54 @@
+es:
+  all_exams: "Todos los Exámenes"
+  create_new_exam: "Crear Nuevo Examen"
+  no_exams_found: "No se encontraron exámenes."
+  delete_exam_confirmation: "¿Estás seguro de que quieres eliminar este examen?"
+  activerecord:
+    models:
+      exam: "Examen"
+    plural:
+      exams: "Exámenes"
+    attributes:
+      exam:
+        title: "Título del examen"
+        scorable: "¿Puntuable?"
+        score: "Puntuación"
+        manager: "Manager"
+        start_date: "Fecha de inicio"
+        end_date: "Fecha de finalización"
+    filterrific:
+      exam:
+        options_for_sorted_by:
+          title_asc: "Título (A-Z)"
+          title_desc: "Título (Z-A)"
+          start_date_asc: "Fecha de inicio (más antigua primero)"
+          start_date_desc: "Fecha de inicio (más reciente primero)"
+          end_date_asc: "Fecha de fin (más antigua primero)"
+          end_date_desc: "Fecha de fin (más reciente primero)"
+    messages:
+      exam:
+        total_possible_score_label: "Puntuación total posible:"
+        no_questions_for_this_exam_yet: "Aún no hay preguntas para este examen."
+        question_number: "%{index}. %{content}"
+        points:
+          one: "%{score} punto"
+          other: "%{score} puntos"
+        type_label: "Tipo:"
+        view_my_results: "Ver Mis Resultados"
+        continue_exam: "Continuar examen"
+        take_exam: "Realizar Examen"
+        this_exam_has_ended: "Este examen ha finalizado."
+        this_exam_not_yet_available: "Este examen aún no está disponible."
+        free_text_answer: "(Respuesta de texto libre)"
+        destroy: "¿Estás seguro de que quieres eliminar este examen? Esta acción es irreversible."
+    errors:
+      models:
+        exam:
+          attributes:
+            title:
+              blank: "no puede estar en blanco"
+            start_date:
+              blank: "no puede estar en blanco"
+            end_date:
+              blank: "no puede estar en blanco"
+              must_be_after_start_date: "debe ser posterior a la fecha de inicio" # <--- ADD THIS LINE

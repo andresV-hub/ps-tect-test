@@ -1,0 +1,27 @@
+= simple_form_for @exam do |f|
+  = f.error_notification class: 'alert alert-danger'
+
+  h3 = t('activerecord.models.exam')
+  .form-inputs
+    .row.mt-2
+      = f.label :title
+      = f.input :title, label: false
+    .row.mt-2
+      .col-md-6
+        = f.label :start_date
+        = f.input :start_date, label: false, as: :string, input_html: { class: 'flatpickr-input', data: { date_format: 'Y-m-d H:i', enable_time: true, no_calendar: false, enable_seconds: false } }
+      .col-md-6
+        = f.label :end_date
+        = f.input :end_date, label: false, as: :string, input_html: { class: 'flatpickr-input', data: { date_format: 'Y-m-d H:i', enable_time: true, no_calendar: false, enable_seconds: false } }
+
+    br
+    h4 = t('activerecord.plural.questions')
+    #questions-container.mt-3
+      = f.simple_fields_for :questions do |question_fields|
+        = render 'question_fields', f: question_fields
+      .links.mt-3
+        = link_to_add_association t('add_question'), f, :questions, class: "btn btn-outline-primary btn-sm"
+
+  .form-actions.mt-4
+    = f.button :submit, "#{t('actions.create')} #{t('activerecord.models.exam')}", class: "btn btn-primary me-2"
+    = link_to t('actions.back'), exams_path, class: "btn btn-secondary"

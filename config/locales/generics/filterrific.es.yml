@@ -1,0 +1,6 @@
+es:
+  search_placeholder: "Escribe para buscar..."
+  sort_by: "Ordenar por"
+  select_sort_option: "Selecciona una opción de ordenación"
+  apply_filters: "Aplicar Filtros"
+  reset_filters: "Restablecer Filtros"

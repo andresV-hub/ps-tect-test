@@ -1,0 +1,40 @@
+h2 = "Responder examen: #{@user_exam.exam.title}"
+
+= form_with model: @user_exam, local: true do |f|
+  - if @user_exam.errors.any?
+    .alert.alert-danger
+      h4 Errores al enviar respuestas:
+      ul
+        - @user_exam.errors.full_messages.each do |msg|
+          li = msg
+
+  = f.fields_for :user_answers do |af|
+    - q = af.object.question
+    .mb-3
+      = af.hidden_field :id
+      = af.hidden_field :question_id
+
+      p
+        strong Pregunta:
+        = q.content
+
+      - case q.question_type
+      - when 'text'
+        = af.check_box :text_answer_correct
+        = af.label :text_answer_correct
+        .form-group
+          = af.text_area :text_answer, rows: 3, class: 'form-control', placeholder: 'Tu respuesta'
+      - when 'single_choice'
+        .form-group
+          - q.question_options.each do |opt|
+            div.form-check
+              = radio_button_tag "user_exam[user_answers_attributes][#{af.index}][question_option_ids][]", opt.id, af.object.question_options.include?(opt), id: "answer_#{af.index}_option_#{opt.id}", class: 'form-check-input'
+              = label_tag "answer_#{af.index}_option_#{opt.id}", opt.content, class: 'form-check-label'
+      - when 'multiple_choice'
+        .form-group
+          - q.question_options.each do |opt|
+            div.form-check
+              = check_box_tag "user_exam[user_answers_attributes][#{af.index}][question_option_ids][]", opt.id, af.object.question_options.include?(opt), id: "answer_#{af.index}_option_#{opt.id}", class: 'form-check-input'
+              = label_tag "answer_#{af.index}_option_#{opt.id}", opt.content, class: 'form-check-label'
+
+  = f.submit "Enviar respuestas", class: 'btn btn-primary'

@@ -1,0 +1,31 @@
+- if user_exams.empty?
+  .alert.alert-info You haven't completed any exams yet.
+- else
+  .table-responsive
+    table.table.table-hover.table-striped
+      thead
+        tr
+          th = t('activerecord.models.exam')
+          th = t('activerecord.user_exam.messages.your_score')
+          th = t('activerecord.user_exam.messages.completed_on')
+          th = t('actions.name')
+      tbody
+        - user_exams.each do |user_exam|
+          tr
+            td = link_to user_exam.exam.title, user_exam_path(user_exam)
+            td
+              - if user_exam.completed_at.present?
+                = "#{user_exam.score.round(2)} / #{user_exam.exam.total_score.round(2)}"
+              - else
+                span.badge.bg-warning.text-dark = t('activerecord.user_exam.attributes.status_badge.in_progress')
+            td
+              - if user_exam.completed_at.present?
+                = user_exam.completed_at.strftime("%d/%m/%Y %H:%M")
+              - else
+                | N/A
+            td
+              - if user_exam.completed_at.present?
+                = link_to t('activerecord.messages.exam.view_my_results'), user_exam_path(user_exam), class: "btn btn-info btn-sm"
+              - else
+                = link_to t('activerecord.messages.exam.continue_exam'), new_exam_user_exam_path(user_exam.exam), class: "btn btn-primary btn-sm"
+  = will_paginate user_exams

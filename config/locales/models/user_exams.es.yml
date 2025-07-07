@@ -1,0 +1,21 @@
+es:
+  activerecord:
+    errors:
+      models:
+        user_answer:
+          blank: "No puede estar en blanco."
+  user_exams:
+    continue_exam_heading: "Continuar examen: %{title}"
+    take_exam_heading: "Realizar examen: %{title}"
+    text_answer_placeholder: "Escribe tu respuesta aquí..."
+    select_one_label: "Selecciona una opción:"
+    select_all_label: "Selecciona todas las opciones correctas:"
+    submit_exam_button: "Enviar examen"
+    add_answer_button: "Añadir respuesta"
+    remove_answer_button: "Eliminar respuesta"
+    new_question_label: "Nueva pregunta"
+    no_question_selected: "Ninguna pregunta seleccionada."
+    select_question_prompt: "Selecciona una pregunta"
+  question_number_display: "Pregunta %{index}: %{content}"
+  question_content_display: "Contenido de la pregunta: %{content}"
+  cancel_button: "Cancelar"

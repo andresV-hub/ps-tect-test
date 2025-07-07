@@ -1,0 +1,49 @@
+es:
+  activerecord:
+    models:
+      question: "Pregunta"
+    plural:
+      questions: "Preguntas"
+    attributes:
+      question:
+        content: "Contenido de la pregunta"
+        question_type: "Tipo de pregunta"
+        scorable: "¿Puntuable?"
+        score: "Puntuación"
+        exam: "Examen"
+        question_options: "Opciones de respuesta"
+    errors:
+      models:
+        question:
+          attributes:
+            question_type:
+              inclusion: "no es un tipo de pregunta válido"
+            content:
+              blank: "no puede estar en blanco"
+            score:
+              blank: "no puede estar en blanco"
+              not_a_number: "no es un número válido"
+              greater_than_or_equal_to: "debe ser mayor o igual a %{count}"
+            question_options:
+              cannot_have_options_for_text_type: "no puede tener opciones para preguntas de tipo texto."
+              must_have_at_least_one_option: "debe tener al menos una opción"
+              must_have_at_least_one_incorrect_option: "debe haber alguna opción marcada como incorrecta"
+              must_have_exactly_one_correct_option_for_single_choice: "debe tener exactamente una opción correcta para selección única"
+              must_have_at_least_two_correct_option_for_multiple_choice: "debe tener al menos dos opciones correctas para selección múltiple"
+  enums:
+    question:
+      question_type:
+        text: "Texto libre"
+        multiple_choice: "Selección múltiple"
+        single_choice: "Selección única"
+
+  add_question: "Añadir Pregunta"
+  select_type_prompt: "Seleccionar Tipo"
+  is_scorable_label: "¿Puntuable?"
+  score_value_label: "Valor de la Puntuación"
+  options_heading: "Opciones"
+  add_option: "Añadir Opción"
+  remove_question: "Eliminar Pregunta"
+  option_content_placeholder: "Contenido de la opción"
+  correct_option_label: "Correcta"
+  remove: "Eliminar"

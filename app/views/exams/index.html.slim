@@ -1,0 +1,22 @@
+.mt-4
+  h2
+    = t('activerecord.plural.exams')
+    - if current_user.admin?
+      = link_to t('create_new_exam'), new_exam_path, class: "btn btn-success float-end"
+
+  hr
+
+  = form_for_filterrific @filterrific do |f|
+    .row.mb-3
+      .col-md-8
+        = f.label :sorted_by, t('sort_by')
+        = f.select :sorted_by, @filterrific.select_options[:sorted_by], { include_blank: t('select_sort_option') }, { class: 'form-select' }
+      .col-md-4
+        br
+        = f.submit t('apply_filters'), class: 'btn btn-primary me-2'
+        = link_to t('reset_filters'), reset_filterrific_url, class: 'btn btn-secondary'
+
+  hr
+
+  #filterrific_results
+    = render(partial: 'exams/list', locals: { exams: @exams })

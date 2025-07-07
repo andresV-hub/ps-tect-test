@@ -1,0 +1,7 @@
+en:
+  will_paginate:
+    previous_label: "Anterior"
+    next_label: "Siguiente"
+    pager: "Página %{current_page} de %{total_pages}"
+    per_page: "Por página"
+    page_count: "de %{total_pages} páginas"

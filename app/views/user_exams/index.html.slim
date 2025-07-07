@@ -1,0 +1,5 @@
+.mt-4
+  h2 = t('activerecord.user_exam.messages.completed_exams')
+  hr
+#filterrific_results
+  = render(partial: 'user_exams/list', locals: { user_exams: @user_exams })

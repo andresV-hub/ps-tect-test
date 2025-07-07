@@ -1,0 +1,12 @@
+es:
+  analytics:
+    exams_created_by_month: "Exámenes creados por mes"
+    exams_created_by_month_title: "Tendencia de Creación de Exámenes"
+    user_exams_completed_by_month: "Exámenes completados por mes"
+    user_exams_completed_by_month_title: "Tendencia de Completado de Exámenes"
+    average_score_per_exam: "Puntuación promedio por examen"
+    average_score_per_exam_title: "Puntuación Promedio de Exámenes"
+    students_per_exam: "Estudiantes por examen"
+    students_per_exam_title: "Participación de Estudiantes por Examen"
+    question_type_distribution: "Distribución de tipos de pregunta"
+    question_type_distribution_title: "Tipos de Pregunta en el Sistema"

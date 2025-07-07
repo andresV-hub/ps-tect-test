@@ -1,0 +1,25 @@
+es:
+  simple_form:
+    "si": 'Sí'
+    "no": 'No'
+    required:
+      text: 'obligatorio'
+      mark: '*'
+    error_notification:
+      default_message: "Por favor, revisa los problemas a continuación:"
+    labels:
+      default: "Campo"
+    hints:
+      default: ""
+    placeholders:
+      default: ""
+    errors:
+      template:
+        header:
+          one: "1 error impidió que este %{model} se guardara"
+          other: "%{count} errores impidieron que este %{model} se guardara"
+        body: "Hubo problemas con los siguientes campos:"
+    submit:
+      create: "Crear %{model}"
+      update: "Actualizar %{model}"
+      submit: "Guardar %{model}"

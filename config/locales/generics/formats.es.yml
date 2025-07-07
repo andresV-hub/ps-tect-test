@@ -1,0 +1,23 @@
+es:
+  time:
+    formats:
+      long: "%d de %B de %Y"
+  date:
+    month_names:
+      - ~
+      - Enero
+      - Febrero
+      - Marzo
+      - Abril
+      - Mayo
+      - Junio
+      - Julio
+      - Agosto
+      - Septiembre
+      - Octubre
+      - Noviembre
+      - Diciembre
+    order:
+      - :year
+      - :month
+      - :day

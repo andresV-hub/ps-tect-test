@@ -1,0 +1,18 @@
+nav.p-3
+  h4 = t('activerecord.plural.exams')
+  ul.nav.flex-column
+    li.nav-item
+      = link_to t('all_exams'), exams_path, class: "nav-link"
+    - if current_user.student?
+      li.nav-item
+        = link_to t('navigation.user_examd'), user_exams_path, class: 'nav-link'
+    - if current_user.admin?
+      li.nav-item
+        = link_to t('create_new_exam'), new_exam_path, class: "nav-link"
+      - if @exam&.persisted?
+        li.nav-item
+          = link_to "#{t('actions.show')} #{@exam.title}", exam_path(@exam.id), class: "nav-link"
+        li.nav-item
+          = link_to "#{t('actions.edit')} #{@exam.title}", edit_exam_path(@exam.id), class: "nav-link"
+        li.nav-item
+          = link_to "#{t('actions.delete')} #{@exam.title}", exam_path(@exam), method: :delete, data: { confirm: t('activerecord.messages.exam.destroy')}, class: "nav-link text-danger"

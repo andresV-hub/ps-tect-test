@@ -1,0 +1,50 @@
+.mt-4
+  h2
+    - if @user_exam.persisted?
+      = t('user_exams.continue_exam_heading', title: @exam.title)
+    - else
+      = t('user_exams.take_exam_heading', title: @exam.title)
+  hr
+
+  = simple_form_for [@exam, @user_exam] do |f|
+    = f.error_notification
+
+    .form-inputs
+      = f.simple_fields_for :user_answers do |answer_fields|
+        .card.mb-3
+          .card-body
+            h5.card-title
+              = t('question_number_display', index: answer_fields.index + 1, content: answer_fields.object.question.content)
+            = answer_fields.hidden_field :question_id
+
+            - if answer_fields.object.question.text?
+              = answer_fields.input :text_answer,
+                      as: :text,
+                      label: false,
+                      placeholder: t('user_exams.text_answer_placeholder'),
+                      input_html: { rows: 4 }
+            - elsif answer_fields.object.question.single_choice?
+              .form-group
+                label = t('user_exams.select_one_label')
+                = answer_fields.collection_check_boxes :question_option_ids,
+                        answer_fields.object.question.question_options,
+                        :id,
+                        :content,
+                        item_wrapper_class: 'form-check',
+                        label_method: :content,
+                        checked: answer_fields.object.question_options.first&.id,
+                        input_html: { name: "user_exam[user_answers_attributes][#{answer_fields.index}][question_option_ids][]" }
+            - elsif answer_fields.object.question.multiple_choice?
+              .form-group
+                label = t('user_exams.select_all_label')
+                = answer_fields.collection_check_boxes :question_option_ids,
+                        answer_fields.object.question.question_options,
+                        :id,
+                        :content,
+                        item_wrapper_class: 'form-check',
+                        label_method: :content,
+                        checked: answer_fields.object.question_options.pluck(:id)
+
+    .form-actions.mt-4
+      = f.button :submit, t('user_exams.submit_exam_button'), class: "btn btn-primary me-2"
+      = link_to t('cancel_button'), exams_path, class: "btn btn-secondary"

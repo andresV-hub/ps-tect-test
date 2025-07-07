@@ -1,0 +1,44 @@
+.container.mt-4
+  h1 = t('navigation.analytics')
+  hr
+
+  .row.mb-4
+    .col-md-6
+      .card
+        .card-header
+          h5 = t('analytics.exams_created_by_month')
+        .card-body
+          = line_chart @exams_created_by_month, height: "300px", colors: ["#3498db"], title: t('analytics.exams_created_by_month_title')
+
+    .col-md-6
+      .card
+        .card-header
+          h5 = t('analytics.user_exams_completed_by_month')
+        .card-body
+          = line_chart @user_exams_completed_by_month, height: "300px", colors: ["#2ecc71"], title: t('analytics.user_exams_completed_by_month_title')
+
+  .row.mb-4
+    .col-md-6
+      .card
+        .card-header
+          h5 = t('analytics.average_score_per_exam')
+        .card-body
+          = bar_chart @average_score_per_exam, height: "300px", colors: ["#9b59b6"], title: t('analytics.average_score_per_exam_title')
+
+    .col-md-6
+      .card
+        .card-header
+          h5 = t('analytics.students_per_exam')
+        .card-body
+          = pie_chart @students_per_exam, height: "300px", colors: ["#e67e22", "#f1c40f", "#1abc9c", "#34495e", "#c0392b"], title: t('analytics.students_per_exam_title')
+
+  .row.mb-4
+    .col-md-6
+      .card
+        .card-header
+          h5 = t('analytics.question_type_distribution')
+        .card-body
+          = pie_chart @question_type_distribution, height: "300px", colors: ["#3498db", "#2ecc71", "#9b59b6", "#e67e22"], title: t('analytics.question_type_distribution_title')
+
+  .mt-4
+    = link_to t('actions.back'), root_path, class: "btn btn-secondary"

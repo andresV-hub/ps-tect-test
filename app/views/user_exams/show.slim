@@ -1,0 +1,62 @@
+.mt-4
+  h2 = @user_exam.exam.title
+  hr
+
+  .card.mb-3
+    .card-body
+      p
+        strong = t('activerecord.user_exam.messages.your_score')
+        - if @user_exam.completed_at.present?
+          span.badge.bg-primary.fs-5 = "#{@user_exam.score.round(2)} / #{@user_exam.exam.total_score.round(2)}"
+        - else
+          span.badge.bg-warning.text-dark = t('activerecord.user_exam.attributes.status_badge.not_completed')
+      p
+        strong = t('activerecord.user_exam.messages.completed_on')
+        - if @user_exam.completed_at.present?
+          = @user_exam.completed_at.strftime("%d/%m/%Y %H:%M")
+        - else
+          | N/A
+
+  h3 = t('activerecord.user_exam.messages.your_answers')
+  hr
+
+  - if @user_exam.user_answers.empty?
+    .alert.alert-info = t('activerecord.user_exam.messages.mo_answers_recorded')
+  - else
+    - @user_exam.user_answers.includes(question: :question_options).each_with_index do |user_answer, index|
+      .card.mb-2
+        .card-body
+          h5.card-title
+            | #{index + 1}. #{user_answer.question.content}
+            - if user_answer.question.scorable?
+              span.badge.bg-info.float-end = "#{user_answer.question.score} puntos"
+          p.card-text
+            em Type: #{user_answer.question.question_type.humanize}
+
+          - if user_answer.question.text?
+            p
+              strong = t('activerecord.user_exam.messages.your_answer')
+              = user_answer.text_answer || t('activerecord.user_exam.messages.no_answer_provided')
+          - else
+            strong = t('activerecord.user_exam.messages.your_selection')
+            ul.list-group.list-group-flush.mt-2
+              - user_answer.question.question_options.each do |option|
+                li.list-group-item
+                  - if user_answer.question_options.include?(option)
+                    i.bi.bi-check-circle-fill.text-primary.me-2
+                    strong = option.content
+                  - else
+                    i.bi.bi-circle.text-muted.me-2
+                    = option.content
+
+            strong = t('activerecord.user_exam.messages.correct_answers')
+            ul.list-group.list-group-flush.mt-2
+              - user_answer.question.question_options.where(correct: true).each do |option|
+                li.list-group-item
+                  i.bi.bi-check-lg.text-success.me-2
+                  = option.content
+
+  .mt-4
+    = link_to t('activerecord.user_exam.messages.back_to_user_exams'), user_exams_path, class: "btn btn-secondary me-2"
+    - if @user_exam.exam.available_now? && !@user_exam.completed_at.present?
+      = link_to t('activerecord.user_exam.messages.edit_answers'), edit_user_exam_path(@user_exam), class: "btn btn-warning"

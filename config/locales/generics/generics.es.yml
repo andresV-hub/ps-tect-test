@@ -1,0 +1,10 @@
+es:
+  messages:
+    status: "Estado"
+  actions:
+    name: "Acciones"
+    create: "Crear"
+    edit: "Editar"
+    delete: "Eliminar"
+    back: "Volver"
+    show: "Ver"

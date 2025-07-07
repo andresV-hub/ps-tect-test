@@ -1,0 +1,20 @@
+<h2><%= t("defaults.log_in_title") %></h2>
+
+<%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <div class="form-inputs">
+    <%= f.input :email,
+                required: false,
+                autofocus: true,
+                label: t("defaults.email"),
+                input_html: { autocomplete: "email" } %>
+    <%= f.input :password,
+                required: false,
+                label: t("defaults.password"),
+                input_html: { autocomplete: "current-password" } %>
+    <%= f.input :remember_me, as: :boolean, label: t("defaults.remember_me") if devise_mapping.rememberable? %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, t("defaults.log_in") %>
+  </div>
+<% end %>

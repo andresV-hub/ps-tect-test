@@ -1,0 +1,38 @@
+.nested-fields.card.mb-3
+  .card-body
+    h5.card-title
+      = answer_fields.object.question.present? ? t('question_content_display', content: answer_fields.object.question.content) : t('user_exams.new_question_label')
+
+    .d-flex.justify-content-end
+      = link_to_remove_association t('user_exams.remove_answer_button'), answer_fields, class: "btn btn-danger btn-sm"
+
+    = answer_fields.hidden_field :question_id
+
+    - if answer_fields.object.question.present? && answer_fields.object.question.text?
+      = answer_fields.input :text_answer,
+              as: :text,
+              label: false,
+              placeholder: t('user_exams.text_answer_placeholder'),
+              input_html: { rows: 4 }
+    - elsif answer_fields.object.question.present? && answer_fields.object.question.single_choice?
+      .form-group
+        label = t('user_exams.select_one_label')
+        = answer_fields.collection_radio_buttons :question_option_ids,
+                answer_fields.object.question.question_options,
+                :id,
+                :content,
+                item_wrapper_class: 'form-check',
+                label_method: :content,
+                checked: answer_fields.object.question_options.first&.id
+    - elsif answer_fields.object.question.present? && answer_fields.object.question.multiple_choice?
+      .form-group
+        label = t('user_exams.select_all_label')
+        = answer_fields.collection_check_boxes :question_option_ids,
+                answer_fields.object.question.question_options,
+                :id,
+                :content,
+                item_wrapper_class: 'form-check',
+                label_method: :content,
+                checked: answer_fields.object.question_options.pluck(:id)
+    - else
+      p = t('user_exams.no_question_selected')

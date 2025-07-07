@@ -1,0 +1,4 @@
+es:
+  activerecord:
+    messages:
+      welcome: "Bienvenido a la página de Exámenes %{email}"

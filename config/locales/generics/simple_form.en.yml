@@ -1,0 +1,27 @@
+en:
+  simple_form:
+    "yes": 'Yes'
+    "no": 'No'
+    required:
+      text: 'required'
+      mark: '*'
+    error_notification:
+      default_message: "Please review the problems below:"
+    labels:
+      default: "Field"
+    hints:
+      default: ""
+    placeholders:
+      default: ""
+      template:
+        header:
+          one: "1 error prohibited this %{model} from being saved"
+          other: "%{count} errors prohibited this %{model} from being saved"
+        body: "There were problems with the following fields:"
+    submit:
+      create: "Create %{model}"
+      update: "Update %{model}"
+      submit: "Save %{model}"
+  errors:
+    messages:
+      blank: "no puede estar en blanco"

@@ -1,0 +1,31 @@
+.nested-fields.card.card-body.mb-3 data-question-type=(f.object.question_type || 'text')
+  .row
+    .col-md-2
+      .form-check
+        = f.check_box :scorable, class: "form-check-input scorable-checkbox"
+        = f.label :scorable, t('is_scorable_label'), class: "form-check-label"
+    .col-md-7
+      .score-input-group
+        = f.input :score, as: :integer, label: t('score_value_label'), input_html: { class: "score-input" }, required: false
+    .col-md-3
+      = f.input :question_type,
+              label: t('activerecord.attributes.question.question_type'),
+              collection: Question::VALID_QUESTION_TYPES.map { |type| [t("enums.question.question_type.#{type}"), type] },
+              prompt: t('select_type_prompt'),
+              input_html: { class: "form-select question-type-select" }
+  .row
+    = f.label :content
+    = f.input :content, label: false
+  .options-fields.mt-3
+    h6 = t('options_heading')
+    #options-container
+      - if f.object.errors.messages[:question_options].present?
+        .alert.alert-danger.mt-2
+          ul
+            - f.object.errors.messages[:question_options].each do |message|
+              li = message
+      = f.simple_fields_for :question_options do |option_fields|
+        = render 'question_option_fields', f: option_fields
+      .links.mt-2
+        = link_to_add_association t('add_option'), f, :question_options, class: "btn btn-outline-secondary btn-sm"
+        = link_to_remove_association t('remove_question'), f, class: "btn btn-outline-danger btn-sm"

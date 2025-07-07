@@ -1,0 +1,9 @@
+es:
+  navigation:
+    home: "Inicio"
+    analytics: "Analíticas"
+    logout: "Cerrar sesión"
+    login: "Iniciar sesión"
+    sign_up: "Registrarse"
+    exams: "Examenes"
+    user_examd: "Examenes completados"

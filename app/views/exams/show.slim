@@ -1,0 +1,73 @@
+.mt-4
+  h2 = @exam.title
+  hr
+  .card.mb-3
+    .card-body
+      p
+        strong = t('activerecord.attributes.exam.start_date')
+        = @exam.start_date.strftime("%d/%m/%Y %H:%M")
+      p
+        strong = t('activerecord.attributes.exam.end_date')
+        = @exam.end_date.strftime("%d/%m/%Y %H:%M")
+      p
+        strong = t('activerecard.messages.exam.total_possible_score_label')
+        = @exam.total_score
+
+  - if current_user.admin?
+    h3 = "#{t('activerecord.plural.questions')}:"
+    hr
+    - if @exam.questions.empty?
+      .alert.alert-info = t('activerecord.messages.exam.no_questions_for_this_exam_yet')
+    - else
+      - @exam.questions.each_with_index do |question, index|
+        .card.mb-2
+          .card-body
+            h5.card-title = t('activerecord.messages.exam.question_number', index: index + 1, content: question.content)
+            - if question.scorable?
+              span.badge.bg-info.float-end = t('activerecord.messages.exam.points', score: question.score, count: question.score)
+            p.card-text
+              em = "#{t('activerecord.messages.exam.type_label')} #{t("enums.question.question_type.#{question.question_type}")}"
+              - if question.text?
+                p.text-muted = t('activerecord.messages.exam.free_text_answer')
+              - else
+                ul.list-group.list-group-flush.mt-2
+                  - question.question_options.each do |option|
+                    li.list-group-item
+                      - if option.correct?
+                        i.bi.bi-check-lg.text-success.me-2
+                      - else
+                        i.bi.bi-x-lg.text-danger.me-2
+                      = option.content
+
+
+    h2 Resultados:
+    - if @exam.user_exams.empty?
+      .alert.alert-info = t('activerecord.messages.exam.no_students_have_taken_this_exam_yet')
+    - else
+      ul.list-group
+        - @exam.user_exams.includes(:user).each do |user_exam|
+          li.list-group-item.d-flex.justify-content-between.align-items-center
+            span
+              = user_exam.user.email
+              - if user_exam.completed_at.present?
+                small.text-muted = " - Completado el #{user_exam.completed_at.strftime("%d/%m/%Y %H:%M")})"
+              - else
+                small.text-muted (No completado)
+            = link_to "Ver respuestas", edit_user_exam_path(user_exam), class: "btn btn-sm btn-info"
+
+  .mt-4
+    - if current_user.admin?
+      = link_to "#{t('actions.edit')} #{@exam.title}", edit_exam_path(@exam), class: "btn btn-warning me-2"
+      = link_to t('actions.back'), exams_path, class: "btn btn-secondary"
+    - else
+      = link_to t('actions.back'), exams_path, class: "btn btn-secondary me-2"
+      - if @exam.available_now?
+        - user_exam = @exam.user_exams.find_by(user: current_user)
+        - if user_exam&.completed_at.present?
+          = link_to t('activerecord.messages.exam.view_my_results'), user_exam_path(user_exam), class: "btn btn-primary"
+        - else
+          = link_to t('activerecord.messages.exam.take_exam'), new_exam_user_exam_path(@exam), class: "btn btn-primary"
+      - elsif @exam.end_date < Time.current
+        .alert.alert-warning.mt-3 = t('activerecord.messages.exam.this_exam_has_ended')
+      - else
+        .alert.alert-warning.mt-3 = t('activerecord.messages.exam.this_exam_not_yet_available')
