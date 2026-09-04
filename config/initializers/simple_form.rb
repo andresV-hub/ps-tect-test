@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Uncomment this and change the path if necessary to include your own
 # components.
@@ -13,55 +14,61 @@ SimpleForm.setup do |config|
   # wrapper, change the order or even add your own to the
   # stack. The options given below are used to wrap the
   # whole input.
-  config.wrappers :default, class: :input,
-    hint_class: :field_with_hint, error_class: :field_with_errors, valid_class: :field_without_errors do |b|
-    ## Extensions enabled by default
-    # Any of these extensions can be disabled for a
-    # given input by passing: `f.input EXTENSION_NAME => false`.
-    # You can make any of these extensions optional by
-    # renaming `b.use` to `b.optional`.
+  # Wrappers de Bootstrap 5 — docs/styles.md §6.8.
+  #
+  # El wrapper que traía el generador no ponía ninguna clase: los inputs salían
+  # sin `form-control`, con la etiqueta y el campo en la misma línea y sin
+  # ningún estilo, en TODOS los formularios de la aplicación. Estos wrappers
+  # son la versión vertical de Bootstrap 5.
 
-    # Determines whether to use HTML5 (:email, :url, ...)
-    # and required attributes
+  config.wrappers :default, class: "input mb-3" do |b|
     b.use :html5
-
-    # Calculates placeholders automatically from I18n
-    # You can also pass a string as f.input placeholder: "Placeholder"
     b.use :placeholder
-
-    ## Optional extensions
-    # They are disabled unless you pass `f.input EXTENSION_NAME => true`
-    # to the input. If so, they will retrieve the values from the model
-    # if any exists. If you want to enable any of those
-    # extensions by default, you can change `b.optional` to `b.use`.
-
-    # Calculates maxlength from length validations for string inputs
-    # and/or database column lengths
     b.optional :maxlength
-
-    # Calculate minlength from length validations for string inputs
     b.optional :minlength
-
-    # Calculates pattern from format validations for string inputs
     b.optional :pattern
-
-    # Calculates min and max from length validations for numeric inputs
     b.optional :min_max
-
-    # Calculates readonly automatically from readonly attributes
     b.optional :readonly
 
-    ## Inputs
-    # b.use :input, class: 'input', error_class: 'is-invalid', valid_class: 'is-valid'
-    b.use :label_input
-    b.use :hint,  wrap_with: { tag: :span, class: :hint }
-    b.use :error, wrap_with: { tag: :span, class: :error }
+    b.use :label, class: "form-label"
+    b.use :input, class: "form-control", error_class: "is-invalid"
+    b.use :full_error, wrap_with: { class: "invalid-feedback d-block" }
+    b.use :hint, wrap_with: { tag: :small, class: "form-text text-muted" }
+  end
 
-    ## full_messages_for
-    # If you want to display the full error message for the attribute, you can
-    # use the component :full_error, like:
-    #
-    # b.use :full_error, wrap_with: { tag: :span, class: :error }
+  config.wrappers :select, class: "input mb-3" do |b|
+    b.use :html5
+    b.optional :readonly
+
+    b.use :label, class: "form-label"
+    b.use :input, class: "form-select", error_class: "is-invalid"
+    b.use :full_error, wrap_with: { class: "invalid-feedback d-block" }
+    b.use :hint, wrap_with: { tag: :small, class: "form-text text-muted" }
+  end
+
+  config.wrappers :boolean, class: "input mb-3" do |b|
+    b.use :html5
+    b.optional :readonly
+
+    b.wrapper :form_check_wrapper, class: "form-check" do |bb|
+      bb.use :input, class: "form-check-input", error_class: "is-invalid"
+      bb.use :label, class: "form-check-label"
+      bb.use :full_error, wrap_with: { class: "invalid-feedback d-block" }
+    end
+
+    b.use :hint, wrap_with: { tag: :small, class: "form-text text-muted" }
+  end
+
+  config.wrappers :text_area, class: "input mb-3" do |b|
+    b.use :html5
+    b.use :placeholder
+    b.optional :maxlength
+    b.optional :readonly
+
+    b.use :label, class: "form-label"
+    b.use :input, class: "form-control", error_class: "is-invalid"
+    b.use :full_error, wrap_with: { class: "invalid-feedback d-block" }
+    b.use :hint, wrap_with: { tag: :small, class: "form-text text-muted" }
   end
 
   # The default wrapper to be used by the FormBuilder.
@@ -71,10 +78,11 @@ SimpleForm.setup do |config|
   # Defaults to :nested for bootstrap config.
   #   inline: input + label
   #   nested: label > input
-  config.boolean_style = :nested
+  # Bootstrap espera el input y la etiqueta como hermanos dentro de .form-check
+  config.boolean_style = :inline
 
   # Default class for buttons
-  config.button_class = 'btn'
+  config.button_class = "btn"
 
   # Method used to tidy up errors. Specify any Rails Array method.
   # :first lists the first message for each field.
@@ -85,7 +93,7 @@ SimpleForm.setup do |config|
   config.error_notification_tag = :div
 
   # CSS class to add for error notification helper.
-  config.error_notification_class = 'error_notification'
+  config.error_notification_class = "error_notification"
 
   # Series of attempts to detect a default label method for collection.
   # config.collection_label_methods = [ :to_label, :name, :title, :to_s ]
@@ -136,7 +144,17 @@ SimpleForm.setup do |config|
 
   # Custom wrappers for input types. This should be a hash containing an input
   # type as key and the wrapper that will be used for all inputs with specified type.
-  # config.wrapper_mappings = { string: :prepend }
+  config.wrapper_mappings = {
+    boolean: :boolean,
+    select: :select,
+    collection_select: :select,
+    grouped_select: :select,
+    time_zone: :select,
+    date: :select,
+    datetime: :select,
+    time: :select,
+    text: :text_area
+  }
 
   # Namespaces where SimpleForm should look for custom input classes that
   # override default inputs.
@@ -161,7 +179,7 @@ SimpleForm.setup do |config|
   # config.input_class = nil
 
   # Define the default class of the input wrapper of the boolean input.
-  config.boolean_label_class = 'checkbox'
+  config.boolean_label_class = nil
 
   # Defines if the default input wrapper class should be included in radio
   # collection wrappers.

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Power Solutions">
+  <title>Power Solutions</title>
+  <!--
+    "El conmutador" (docs/styles.md 1.6).
+
+    Variante SOBRE FONDO OSCURO, la que usa la navbar: anillo en blanco para
+    que se lea sobre ps-blue-900, barra en ps-amber-500 para conservar los dos
+    colores del sistema. Para fondos claros esta logo.svg.
+
+    Ojo: un comentario XML no admite dos guiones seguidos, asi que los nombres
+    de los tokens se escriben aqui sin el prefijo de variable CSS.
+  -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M356.95 111.82A176 176 0 1 1 155.05 111.82" stroke="#ffffff" stroke-width="56"/>
+    <path d="M256 96V216" stroke="#f59e0b" stroke-width="56"/>
+  </g>
+</svg>

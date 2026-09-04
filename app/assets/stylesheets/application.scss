@@ -1,20 +1,13 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
- * vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
- *
+// Entry point compiled by dartsass-rails into app/assets/builds/application.css.
+// Propshaft serves the built file, so `stylesheet_link_tag :application` picks it up.
+//
+// Load order matters: vendor styles first, so application styles can override them.
+// `generics/brand` carries the Power Solutions tokens (docs/styles.md §2) and has
+// to come after bootstrap, because Bootstrap 5.3 bakes each component's colour
+// into its own rule and only the later cascade wins.
 
- *= require_tree ./generics
- *= require flatpickr
- *= require_self
- */
-
-@import "bootstrap";
-@import "generics/layout";
+@use "generics/generic";
+@use "flatpickr";
+@use "bootstrap";
+@use "generics/brand";
+@use "generics/layout";

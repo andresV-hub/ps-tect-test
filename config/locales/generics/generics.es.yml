@@ -8,3 +8,5 @@ es:
     delete: "Eliminar"
     back: "Volver"
     show: "Ver"
+    close: "Cerrar"
+    save: "Guardar cambios"

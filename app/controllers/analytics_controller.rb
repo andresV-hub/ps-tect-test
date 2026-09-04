@@ -7,16 +7,16 @@ class AnalyticsController < ApplicationController
     @user_exams_completed_by_month = UserExam.completed.group_by_month(:completed_at).count
 
     @average_score_per_exam = Exam.joins(:user_exams)
-                                  .select('exams.title, AVG(user_exams.score) as average_score')
-                                  .group('exams.title')
-                                  .order('average_score DESC')
+                                  .select("exams.title, AVG(user_exams.score) as average_score")
+                                  .group("exams.title")
+                                  .order("average_score DESC")
                                   .limit(5)
-                                  .map { |exam| [exam.title, exam.average_score.to_f.round(2)] }
+                                  .map { |exam| [ exam.title, exam.average_score.to_f.round(2) ] }
                                   .to_h
 
     @students_per_exam = Exam.joins(:user_exams)
-                             .group('exams.title')
-                             .count('DISTINCT user_exams.user_id')
+                             .group("exams.title")
+                             .count("DISTINCT user_exams.user_id")
     @question_type_distribution = Question.group(:question_type).count
   end
 

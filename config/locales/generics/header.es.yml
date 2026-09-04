@@ -1,9 +1,14 @@
 es:
   navigation:
+    brand: "Power Solutions"
     home: "Inicio"
     analytics: "Analíticas"
     logout: "Cerrar sesión"
     login: "Iniciar sesión"
     sign_up: "Registrarse"
-    exams: "Examenes"
-    user_examd: "Examenes completados"
+    edit_account: "Editar mi cuenta"
+    exams: "Exámenes"
+    my_exams: "Mis entregas"
+    side_menu: "Menú de sección"
+    toggle_side_menu: "Abrir el menú de sección"
+    toggle_nav: "Abrir la navegación"

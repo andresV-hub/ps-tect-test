@@ -1,5 +1,4 @@
 class ExamsController < ApplicationController
-
   before_action :set_exam, only: %i[show edit update destroy]
   before_action :authorize_admin!, except: %i[index show]
 
@@ -10,7 +9,7 @@ class ExamsController < ApplicationController
       exams,
       params[:filterrific],
       select_options: {
-        sorted_by: Exam.options_for_sorted_by,
+        sorted_by: Exam.options_for_sorted_by
       }
     ) or return
     @exams = @filterrific.find.page(params[:page])
@@ -32,13 +31,9 @@ class ExamsController < ApplicationController
 
   def create
     @exam = Exam.new(exam_params.merge(manager: current_user))
-    @exam.questions.each_with_index do |q, i|
-      Rails.logger.debug "Pregunta ##{i + 1} — question_type: #{q.question_type.inspect} (class: #{q.question_type.class.name})"
-    end
     if @exam.save
       redirect_to @exam, notice: "Examen creado correctamente."
     else
-      puts "aqui"
       Rails.logger.error @exam.errors.full_messages.to_sentence
       @exam.questions.each do |q|
         Rails.logger.error "Pregunta: #{q.content}, errores: #{q.errors.full_messages.join(', ')}"
@@ -60,7 +55,7 @@ class ExamsController < ApplicationController
 
   def destroy
     @exam.destroy
-    redirect_to exams_path, notice: "Examen eliminado correctamente."
+    redirect_to exams_path, notice: "Examen eliminado correctamente.", status: :see_other
   end
 
   private
@@ -77,7 +72,7 @@ class ExamsController < ApplicationController
       :title, :start_date, :end_date,
       questions_attributes: [
         :id, :content, :question_type, :scorable, :score, :_destroy,
-        question_options_attributes: [:id, :content, :correct, :_destroy]
+        question_options_attributes: [ :id, :content, :correct, :_destroy ]
       ]
     )
   end
@@ -85,5 +80,4 @@ class ExamsController < ApplicationController
   def authorize_admin!
     redirect_to root_path, alert: "Acceso denegado." unless current_user&.admin?
   end
-
 end

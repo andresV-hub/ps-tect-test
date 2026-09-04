@@ -1,27 +1,32 @@
-<h2><%= t("passwords.change_password_title") %></h2>
+<%# Elegir contraseña nueva desde el enlace del correo — docs/styles.md §6.12. %>
+<div class="ps-auth-card">
+  <%= render "devise/shared/auth_header",
+             title: t("passwords.change_password_title"),
+             lead: t("passwords.edit_lead") %>
 
-<%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-  <%= f.error_notification %>
+  <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+    <%= f.error_notification class: "alert alert-danger" %>
 
-  <%= f.input :reset_password_token, as: :hidden %>
-  <%= f.full_error :reset_password_token %>
+    <%= f.input :reset_password_token, as: :hidden %>
+    <%= f.full_error :reset_password_token %>
 
-  <div class="form-inputs">
-    <%= f.input :password,
-                label: t("passwords.new_password"),
-                required: true,
-                autofocus: true,
-                hint: (@minimum_password_length ? t("passwords.minimum_length_hint", count: @minimum_password_length) : nil),
-                input_html: { autocomplete: "new-password" } %>
-    <%= f.input :password_confirmation,
-                label: t("passwords.confirm_new_password"),
-                required: true,
-                input_html: { autocomplete: "new-password" } %>
-  </div>
+    <div class="form-inputs">
+      <%= f.input :password,
+                  label: t("passwords.new_password"),
+                  required: true,
+                  autofocus: true,
+                  hint: (@minimum_password_length ? t("passwords.minimum_length_hint", count: @minimum_password_length) : nil),
+                  input_html: { autocomplete: "new-password" } %>
+      <%= f.input :password_confirmation,
+                  label: t("passwords.confirm_new_password"),
+                  required: true,
+                  input_html: { autocomplete: "new-password" } %>
+    </div>
 
-  <div class="form-actions">
-    <%= f.button :submit, t("passwords.change_password_button") %>
-  </div>
-<% end %>
+    <div class="form-actions">
+      <%= f.button :submit, t("passwords.change_password_button"), class: "btn btn-primary w-100" %>
+    </div>
+  <% end %>
 
-<%= render "devise/shared/links" %>
+  <%= render "devise/shared/links" %>
+</div>

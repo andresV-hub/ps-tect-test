@@ -1,0 +1,61 @@
+// Esqueleto de la aplicación — docs/styles.md §5.
+//
+// El scroll nunca es de la página: el body no desborda y cada columna gestiona
+// su propio overflow. Los colores salen de los tokens de `generics/_brand.scss`.
+//
+// JS hooks preserved: #appSideMenu lo consulta el offcanvas de Bootstrap desde
+// el `data-bs-target` del botón de la navbar. No renombrar.
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--ps-canvas);
+}
+
+body > header {
+  flex-shrink: 0;
+}
+
+.main-content-wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  overflow: hidden;
+}
+
+.left-menu {
+  background-color: var(--ps-canvas);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+
+  // Por debajo de `lg` el menú es un offcanvas (styles.md §8): sin la anchura
+  // fija, que en móvil se comía el ancho útil del contenido.
+  --bs-offcanvas-width: 280px;
+}
+
+@media (min-width: 992px) {
+  .left-menu {
+    flex-shrink: 0;
+    width: 250px;
+    border-right: 1px solid var(--ps-border);
+  }
+}
+
+.content-area {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: var(--ps-surface);
+}
+
+@media (max-width: 991.98px) {
+  // El offcanvas se posiciona solo; el wrapper deja de ser una fila.
+  .main-content-wrapper {
+    flex-direction: column;
+  }
+}

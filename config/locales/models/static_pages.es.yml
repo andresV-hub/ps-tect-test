@@ -1,4 +1,9 @@
 es:
   activerecord:
     messages:
-      welcome: "Bienvenido a la página de Exámenes %{email}"
+      welcome: "Bienvenido, %{email}"
+  static_pages:
+    exams_hint: "Consulta las convocatorias, sus plazos y su estado."
+    my_exams_hint: "Revisa lo que has entregado y la puntuación de cada examen."
+    create_exam_hint: "Compón un examen nuevo con sus preguntas y su ventana temporal."
+    analytics_hint: "Mide la actividad del sistema: creación, entregas y puntuaciones."

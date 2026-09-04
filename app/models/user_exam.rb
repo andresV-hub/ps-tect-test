@@ -26,5 +26,4 @@ class UserExam < ApplicationRecord
   end
 
   scope :completed, -> { where.not(completed_at: nil) }
-
 end

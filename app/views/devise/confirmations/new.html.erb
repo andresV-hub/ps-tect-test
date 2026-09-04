@@ -1,20 +1,28 @@
-<h2>Resend confirmation instructions</h2>
+<%# Reenviar instrucciones de confirmación — docs/styles.md §6.12.
+    El modelo User no activa :confirmable hoy, así que esta ruta no existe;
+    la vista se mantiene alineada por si se habilita. %>
+<div class="ps-auth-card">
+  <%= render "devise/shared/auth_header",
+             title: t("confirmations.resend_title"),
+             lead: t("confirmations.resend_lead") %>
 
-<%= simple_form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
-  <%= f.error_notification %>
-  <%= f.full_error :confirmation_token %>
+  <%= simple_form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
+    <%= f.error_notification class: "alert alert-danger" %>
+    <%= f.full_error :confirmation_token %>
 
-  <div class="form-inputs">
-    <%= f.input :email,
-                required: true,
-                autofocus: true,
-                value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email),
-                input_html: { autocomplete: "email" } %>
-  </div>
+    <div class="form-inputs">
+      <%= f.input :email,
+                  required: true,
+                  autofocus: true,
+                  label: t("defaults.email"),
+                  value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email),
+                  input_html: { autocomplete: "email" } %>
+    </div>
 
-  <div class="form-actions">
-    <%= f.button :submit, "Resend confirmation instructions" %>
-  </div>
-<% end %>
+    <div class="form-actions">
+      <%= f.button :submit, t("confirmations.resend_button"), class: "btn btn-primary w-100" %>
+    </div>
+  <% end %>
 
-<%= render "devise/shared/links" %>
+  <%= render "devise/shared/links" %>
+</div>

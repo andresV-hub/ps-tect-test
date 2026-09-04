@@ -12,11 +12,10 @@ class User < ApplicationRecord
 
 
   def admin?
-    role == 'admin'
+    role == "admin"
   end
 
   def student?
-    role == 'student'
+    role == "student"
   end
-
 end

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Power Solutions">
+  <title>Power Solutions</title>
+  <!--
+    "El conmutador" (docs/styles.md 1.6).
+    Un anillo abierto por arriba con una barra vertical en el hueco: el simbolo
+    de encendido, que ademas se lee como una P. El anillo es la estructura (el
+    ciclo de evaluacion) y la barra es la corriente (el plazo que corre).
+
+    Variante SOBRE FONDO CLARO: anillo en ps-blue-600, barra en ps-amber-500.
+    Para fondos oscuros (la navbar) esta logo-on-dark.svg.
+
+    Ojo: un comentario XML no admite dos guiones seguidos, asi que los nombres
+    de los tokens se escriben aqui sin el prefijo de variable CSS.
+  -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M356.95 111.82A176 176 0 1 1 155.05 111.82" stroke="#1f6b9c" stroke-width="56"/>
+    <path d="M256 96V216" stroke="#f59e0b" stroke-width="56"/>
+  </g>
+</svg>
