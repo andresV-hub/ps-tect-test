@@ -1,0 +1,15 @@
+<%# Cabecera de las tarjetas de autenticación — docs/styles.md §6.12.
+    Es la primera pantalla que ve nadie, así que el logotipo aparece aquí a
+    tamaño de marca, en su variante sobre fondo claro (§1.6).
+
+    Locales: title (obligatorio), lead (opcional). %>
+<div class="ps-auth-card__brand">
+  <%= image_tag "logo.svg", class: "ps-logo", alt: "", aria: { hidden: true } %>
+  <span class="ps-auth-card__brand-name"><%= t("navigation.brand") %></span>
+</div>
+
+<h1 class="ps-auth-card__title"><%= title %></h1>
+
+<% if local_assigns[:lead].present? %>
+  <p class="ps-auth-card__lead"><%= lead %></p>
+<% end %>

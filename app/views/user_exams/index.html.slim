@@ -1,5 +1,10 @@
+/ Mis entregas — docs/styles.md §5 (jerarquía) y §6.3 (tablas).
+/ JS hooks preserved: #filterrific_results es el destino del refresco parcial.
 .mt-4
-  h2 = t('activerecord.user_exam.messages.completed_exams')
+  .ps-page-header
+    h1 = t('activerecord.user_exam.messages.completed_exams')
+
   hr
-#filterrific_results
-  = render(partial: 'user_exams/list', locals: { user_exams: @user_exams })
+
+  #filterrific_results
+    = render(partial: 'user_exams/list', locals: { user_exams: @user_exams })

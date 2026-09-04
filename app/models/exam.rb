@@ -1,6 +1,5 @@
 class Exam < ApplicationRecord
-
-  belongs_to :manager, class_name: 'User'
+  belongs_to :manager, class_name: "User"
   has_many :questions, inverse_of: :exam, dependent: :destroy
   has_many :user_exams, dependent: :destroy
   has_many :users, through: :user_exams
@@ -12,7 +11,7 @@ class Exam < ApplicationRecord
   validate :valid_date_range
 
   scope :available_for_user, ->(user) {
-    where('start_date <= ? AND end_date >= ?', Time.current, Time.current)
+    where("start_date <= ? AND end_date >= ?", Time.current, Time.current)
       .where.not(id: user.user_exams.pluck(:exam_id))
   }
 
@@ -37,7 +36,7 @@ class Exam < ApplicationRecord
   end
 
   filterrific(
-    default_filter_params: { sorted_by: 'start_date_desc' },
+    default_filter_params: { sorted_by: "start_date_desc" },
     available_filters: [
       :sorted_by,
       :with_start_date_gte,
@@ -48,7 +47,7 @@ class Exam < ApplicationRecord
   )
 
   scope :sorted_by, ->(sort_option) {
-    direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
+    direction = (sort_option =~ /desc$/) ? "desc" : "asc"
     case sort_option.to_s
     when /^title_/
       order("LOWER(exams.title) #{direction}")
@@ -62,30 +61,29 @@ class Exam < ApplicationRecord
   }
 
   scope :with_start_date_gte, ->(start_date) {
-    where('exams.start_date >= ?', start_date) if start_date.present?
+    where("exams.start_date >= ?", start_date) if start_date.present?
   }
 
   scope :with_end_date_gte, ->(end_date) {
-    where('exams.end_date >= ?', end_date) if end_date.present?
+    where("exams.end_date >= ?", end_date) if end_date.present?
   }
 
   scope :with_start_date_lte, ->(start_date) {
-    where('exams.start_date <= ?', start_date) if start_date.present?
+    where("exams.start_date <= ?", start_date) if start_date.present?
   }
 
   scope :with_end_date_lte, ->(end_date) {
-    where('exams.end_date <= ?', end_date) if end_date.present?
+    where("exams.end_date <= ?", end_date) if end_date.present?
   }
 
   def self.options_for_sorted_by
     [
-      [I18n.t('activerecord.filterrific.exam.options_for_sorted_by.title_asc'), 'title_asc'],
-      [I18n.t('activerecord.filterrific.exam.options_for_sorted_by.title_desc'), 'title_desc'],
-      [I18n.t('activerecord.filterrific.exam.options_for_sorted_by.start_date_asc'), 'start_date_asc'],
-      [I18n.t('activerecord.filterrific.exam.options_for_sorted_by.start_date_desc'), 'start_date_desc'],
-      [I18n.t('activerecord.filterrific.exam.options_for_sorted_by.end_date_asc'), 'end_date_asc'],
-      [I18n.t('activerecord.filterrific.exam.options_for_sorted_by.end_date_desc'), 'end_date_desc'],
+      [ I18n.t("activerecord.filterrific.exam.options_for_sorted_by.title_asc"), "title_asc" ],
+      [ I18n.t("activerecord.filterrific.exam.options_for_sorted_by.title_desc"), "title_desc" ],
+      [ I18n.t("activerecord.filterrific.exam.options_for_sorted_by.start_date_asc"), "start_date_asc" ],
+      [ I18n.t("activerecord.filterrific.exam.options_for_sorted_by.start_date_desc"), "start_date_desc" ],
+      [ I18n.t("activerecord.filterrific.exam.options_for_sorted_by.end_date_asc"), "end_date_asc" ],
+      [ I18n.t("activerecord.filterrific.exam.options_for_sorted_by.end_date_desc"), "end_date_desc" ]
     ]
   end
-
 end

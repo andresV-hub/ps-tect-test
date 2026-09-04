@@ -1,1 +1,47 @@
-= t("activerecord.messages.welcome", email: current_user.email)
+/ Portada tras iniciar sesión — docs/styles.md §5 (jerarquía) y §6.6 (tarjetas).
+/ Era una línea de texto suelta sin estructura; ahora es la entrada a las dos o
+/ tres cosas que cada rol puede hacer.
+.mt-4
+  .ps-page-header
+    h1 = t('activerecord.messages.welcome', email: current_user.email)
+
+  hr
+
+  .row.g-4.mt-1
+    .col-md-6.col-lg-4
+      .card.h-100
+        .card-body
+          h5.card-title
+            = bi_icon("journal-text", class: "me-2")
+            = t('activerecord.plural.exams')
+          p.card-text.text-muted = t('static_pages.exams_hint')
+          = link_to t('all_exams'), exams_path, class: "btn btn-primary btn-sm"
+
+    - if current_user.student?
+      .col-md-6.col-lg-4
+        .card.h-100
+          .card-body
+            h5.card-title
+              = bi_icon("check2-square", class: "me-2")
+              = t('navigation.my_exams')
+            p.card-text.text-muted = t('static_pages.my_exams_hint')
+            = link_to t('navigation.my_exams'), user_exams_path, class: "btn btn-primary btn-sm"
+
+    - if current_user.admin?
+      .col-md-6.col-lg-4
+        .card.h-100
+          .card-body
+            h5.card-title
+              = bi_icon("plus-square", class: "me-2")
+              = t('create_new_exam')
+            p.card-text.text-muted = t('static_pages.create_exam_hint')
+            = link_to t('create_new_exam'), new_exam_path, class: "btn btn-primary btn-sm"
+
+      .col-md-6.col-lg-4
+        .card.h-100
+          .card-body
+            h5.card-title
+              = bi_icon("graph-up", class: "me-2")
+              = t('navigation.analytics')
+            p.card-text.text-muted = t('static_pages.analytics_hint')
+            = link_to t('navigation.analytics'), analytics_path, class: "btn btn-primary btn-sm"

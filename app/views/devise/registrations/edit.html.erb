@@ -1,47 +1,58 @@
-<h2><%= t("defaults.update_account_title", resource: resource_name.to_s.humanize) %></h2>
+<%# Editar mi cuenta — docs/styles.md §6.12.
+    Dos tarjetas: los datos de la cuenta y, separada, la baja. %>
+<div class="ps-auth-card">
+  <%= render "devise/shared/auth_header",
+             title: t("navigation.edit_account"),
+             lead: t("defaults.update_account_lead") %>
 
-<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= f.error_notification %>
+  <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <%= f.error_notification class: "alert alert-danger" %>
 
-  <div class="form-inputs">
-    <%= f.input :email,
-                required: true,
-                autofocus: true,
-                label: t("defaults.email") %>
+    <div class="form-inputs">
+      <%= f.input :email,
+                  required: true,
+                  autofocus: true,
+                  label: t("defaults.email") %>
 
-    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-      <p>Actualmente esperando confirmación de: <%= resource.unconfirmed_email %></p>
-    <% end %>
+      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+        <div class="alert alert-info">
+          <%= t("defaults.pending_confirmation", email: resource.unconfirmed_email) %>
+        </div>
+      <% end %>
 
-    <%= f.input :password,
-                required: false,
-                label: t("defaults.password"),
-                hint: t("defaults.password_leave_blank_hint"),
-                input_html: { autocomplete: "new-password" } %>
-    <%= f.input :password_confirmation,
-                required: false,
-                label: t("defaults.password_confirmation"),
-                input_html: { autocomplete: "new-password" } %>
-    <%= f.input :current_password,
-                required: true,
-                label: t("defaults.current_password"),
-                hint: t("defaults.current_password_hint"),
-                input_html: { autocomplete: "current-password" } %>
-  </div>
+      <%= f.input :password,
+                  required: false,
+                  label: t("defaults.password"),
+                  hint: t("defaults.password_leave_blank_hint"),
+                  input_html: { autocomplete: "new-password" } %>
+      <%= f.input :password_confirmation,
+                  required: false,
+                  label: t("defaults.password_confirmation"),
+                  input_html: { autocomplete: "new-password" } %>
+      <%= f.input :current_password,
+                  required: true,
+                  label: t("defaults.current_password"),
+                  hint: t("defaults.current_password_hint"),
+                  input_html: { autocomplete: "current-password" } %>
+    </div>
 
-  <div class="form-actions">
-    <%= f.button :submit, t("defaults.update") %>
-  </div>
-<% end %>
+    <div class="form-actions">
+      <%= f.button :submit, t("defaults.update"), class: "btn btn-primary w-100" %>
+    </div>
+  <% end %>
+</div>
 
-<h3><%= t("defaults.cancel_account_title") %></h3>
+<div class="ps-auth-card ps-auth-card--danger">
+  <h2 class="ps-auth-card__title"><%= t("defaults.cancel_account_title") %></h2>
+  <p class="ps-auth-card__lead"><%= t("defaults.cancel_account_lead") %></p>
 
-<div>
-  ¿No estás satisfecho?
   <%= button_to t("defaults.cancel_account_button"),
                 registration_path(resource_name),
                 method: :delete,
-                data: { confirm: t("defaults.cancel_account_confirm"), turbo_confirm: t("defaults.cancel_account_confirm") } %>
+                class: "btn btn-outline-danger w-100",
+                data: { turbo_confirm: t("defaults.cancel_account_confirm") } %>
 </div>
 
-<%= link_to t("defaults.back"), :back %>
+<div class="ps-auth-links">
+  <div><%= link_to t("defaults.back"), root_path %></div>
+</div>

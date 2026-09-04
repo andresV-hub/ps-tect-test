@@ -13,5 +13,5 @@ Rails.application.routes.draw do
     resources :user_exams, only: %i[new create]
   end
   resources :user_exams, only: %i[index show edit update]
-  get 'analytics', to: 'analytics#index', as: :analytics
+  get "analytics", to: "analytics#index", as: :analytics
 end

@@ -1,18 +1,24 @@
-<h2><%= t("passwords.change_password_title") %></h2>
+<%# Solicitar restablecimiento de contraseña — docs/styles.md §6.12. %>
+<div class="ps-auth-card">
+  <%= render "devise/shared/auth_header",
+             title: t("passwords.forgot_password_title"),
+             lead: t("passwords.new_lead") %>
 
-<%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= f.error_notification %>
+  <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+    <%= f.error_notification class: "alert alert-danger" %>
 
-  <div class="form-inputs">
-    <%= f.input :email,
-                required: true,
-                autofocus: true,
-                input_html: { autocomplete: "email" } %>
-  </div>
+    <div class="form-inputs">
+      <%= f.input :email,
+                  required: true,
+                  autofocus: true,
+                  label: t("defaults.email"),
+                  input_html: { autocomplete: "email" } %>
+    </div>
 
-  <div class="form-actions">
-    <%= f.button :submit, t("passwords.change_password_button") %>
-  </div>
-<% end %>
+    <div class="form-actions">
+      <%= f.button :submit, t("passwords.send_reset_instructions_button"), class: "btn btn-primary w-100" %>
+    </div>
+  <% end %>
 
-<%= render "devise/shared/links" %>
+  <%= render "devise/shared/links" %>
+</div>

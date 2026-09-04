@@ -4,6 +4,37 @@ es:
       models:
         user_answer:
           blank: "No puede estar en blanco."
+    user_exam:
+      # Léxico de las píldoras de estado — docs/styles.md §6.4.
+      # Texto corto en la píldora; la causa (la fecha) va siempre al lado.
+      attributes:
+        status_badge:
+          completed: "Entregado"
+          available: "Disponible"
+          ended: "Finalizado"
+          not_yet_available: "Programado"
+          in_progress: "En curso"
+          not_completed: "Sin entregar"
+      messages:
+        your_score: "Tu puntuación"
+        completed_on: "Fecha de entrega"
+        completed_at: "Entregado el %{date}"
+        not_completed: "Sin entregar"
+        your_answers: "Tus respuestas"
+        your_answer: "Tu respuesta:"
+        your_selection: "Tu selección:"
+        correct_answers: "Respuestas correctas:"
+        no_answer_provided: "No respondida"
+        no_answers_recorded: "No hay respuestas registradas."
+        no_user_exams_yet: "Aún no has entregado ningún examen."
+        back_to_user_exams: "Volver a mis entregas"
+        edit_answers: "Editar mis respuestas"
+        view_answers: "Ver respuestas"
+        completed_exams: "Mis entregas"
+        answer_exam_heading: "Responder examen: %{title}"
+        submit_errors_heading: "No se han podido enviar tus respuestas:"
+        question_label: "Pregunta"
+        mark_as_correct: "Marcar como correcta"
   user_exams:
     continue_exam_heading: "Continuar examen: %{title}"
     take_exam_heading: "Realizar examen: %{title}"
@@ -16,6 +47,15 @@ es:
     new_question_label: "Nueva pregunta"
     no_question_selected: "Ninguna pregunta seleccionada."
     select_question_prompt: "Selecciona una pregunta"
-  question_number_display: "Pregunta %{index}: %{content}"
+    # Mensajes flash que los controladores ya emitían pero que el layout no
+    # llegaba a pintar (docs/styles.md §6.10).
+    not_found_alert: "Esa entrega ya no existe."
+    already_completed_alert: "Ya has entregado este examen, así que no puedes volver a responderlo."
+    exam_completed_notice: "Examen entregado. Esta es tu corrección."
+    submission_failed_alert: "No se ha podido registrar tu entrega. Revisa los errores señalados."
+    update_failed_alert: "No se han podido guardar los cambios. Revisa los errores señalados."
+    updated_notice: "Respuestas actualizadas correctamente."
+  # La numeración de preguntas usa `activerecord.messages.exam.question_number`
+  # en todas las vistas (§1.7); la clave duplicada que había aquí se retiró.
   question_content_display: "Contenido de la pregunta: %{content}"
   cancel_button: "Cancelar"

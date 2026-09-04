@@ -1,25 +1,41 @@
-<%- if controller_name != 'sessions' %>
-  <%= link_to t("defaults.log_in"), new_session_path(resource_name) %><br />
-<% end %>
+<%# Pie de enlaces de las pantallas de autenticación — docs/styles.md §6.12. %>
+<%
+  links = []
 
-<%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-  <%= link_to t("defaults.sign_up"), new_registration_path(resource_name) %><br />
-<% end %>
+  if controller_name != "sessions"
+    links << link_to(t("defaults.log_in"), new_session_path(resource_name))
+  end
 
-<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-  <%= link_to t("defaults.forgot_password"), new_password_path(resource_name) %><br />
-<% end %>
+  if devise_mapping.registerable? && controller_name != "registrations"
+    links << link_to(t("defaults.sign_up"), new_registration_path(resource_name))
+  end
 
-<%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
-  <%= link_to t("defaults.resend_confirmation"), new_confirmation_path(resource_name) %><br />
-<% end %>
+  if devise_mapping.recoverable? && controller_name != "passwords" && controller_name != "registrations"
+    links << link_to(t("defaults.forgot_password"), new_password_path(resource_name))
+  end
 
-<%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
-  <%= link_to t("defaults.resend_unlock"), new_unlock_path(resource_name) %><br />
-<% end %>
+  if devise_mapping.confirmable? && controller_name != "confirmations"
+    links << link_to(t("defaults.resend_confirmation"), new_confirmation_path(resource_name))
+  end
 
-<%- if devise_mapping.omniauthable? %>
-  <%- resource_class.omniauth_providers.each do |provider| %>
-    <%= button_to t("defaults.omniauth_sign_in", provider: OmniAuth::Utils.camelize(provider)), omniauth_authorize_path(resource_name, provider), data: { turbo: false } %><br />
-  <% end %>
+  if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != "unlocks"
+    links << link_to(t("defaults.resend_unlock"), new_unlock_path(resource_name))
+  end
+%>
+
+<% if links.any? || devise_mapping.omniauthable? %>
+  <div class="ps-auth-links">
+    <% links.each do |link| %>
+      <div><%= link %></div>
+    <% end %>
+
+    <% if devise_mapping.omniauthable? %>
+      <% resource_class.omniauth_providers.each do |provider| %>
+        <%= button_to t("defaults.omniauth_sign_in", provider: OmniAuth::Utils.camelize(provider)),
+                      omniauth_authorize_path(resource_name, provider),
+                      class: "btn btn-secondary w-100",
+                      data: { turbo: false } %>
+      <% end %>
+    <% end %>
+  </div>
 <% end %>

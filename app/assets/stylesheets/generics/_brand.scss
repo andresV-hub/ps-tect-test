@@ -1,0 +1,769 @@
+// Capa de marca de Power Solutions.
+//
+// Fuente de verdad: docs/styles.md (copia gemela en
+// .claude/skills/rails-frontend-design/references/styles.md). Si cambia un
+// token aquí, cambia también allí en el mismo commit.
+//
+// Se carga DESPUÉS de bootstrap a propósito. Bootstrap 5.3 compila el color de
+// cada componente a hex dentro de la propia regla (`.btn-primary` fija
+// `--bs-btn-bg: #0d6efd`), así que redefinir sólo `--bs-primary` no basta:
+// aquí se reescriben las variables CSS por componente, que sí ganan por orden
+// de cascada.
+//
+// JS hooks preserved: ninguno de los selectores de este archivo se consulta
+// desde app/javascript/. Los hooks vivos (.nested-fields, .options-fields,
+// .question-type-select, .scorable-checkbox, .score-input, .score-input-group,
+// .flatpickr-input, #filterrific_results) se estilan sin renombrarse.
+
+// ---------------------------------------------------------------------------
+// Tokens — styles.md §2
+// ---------------------------------------------------------------------------
+
+:root {
+  // Azul de marca (la escala) — §2
+  --ps-blue-50: #eef6fd;
+  --ps-blue-100: #d9ecfb;
+  --ps-blue-200: #b3d9f6;
+  --ps-blue-300: #7dbeef;
+  --ps-blue-400: #3498db;
+  --ps-blue-500: #2b7fb8;
+  --ps-blue-600: #1f6b9c;
+  --ps-blue-700: #15537c;
+  --ps-blue-900: #0e3b58;
+
+  // Ámbar de corriente (la luz) — §2. Sólo significa "hay un plazo corriendo".
+  --ps-amber-100: #fef3c7;
+  --ps-amber-300: #fcd34d;
+  --ps-amber-500: #f59e0b;
+  --ps-amber-700: #b45309;
+
+  // Neutros (la carcasa) — §2
+  --ps-ink: #1f2a37;
+  --ps-ink-muted: #475569;
+  --ps-ink-soft: #64748b;
+  --ps-border: #dee2e6;
+  --ps-canvas: #f8f9fa;
+  --ps-surface: #ffffff;
+  --ps-on-dark: #ebedf0;
+
+  // Semánticos — §2
+  --ps-success: #15803d;
+  --ps-success-bg: #ecfdf5;
+  --ps-live: #b45309;
+  --ps-live-bg: #fef3c7;
+  --ps-danger: #b91c1c;
+  --ps-danger-bg: #fef2f2;
+  --ps-info: #1f6b9c;
+  --ps-info-bg: #eef6fd;
+  --ps-neutral: #475569;
+  --ps-neutral-bg: #f1f5f9;
+
+  // Espaciado, bordes y sombras — §4
+  --ps-radius-surface: 0.5rem;
+  --ps-radius-control: 0.375rem;
+  --ps-radius-pill: 999px;
+  --ps-shadow-surface: 0 1px 2px rgba(31, 42, 55, 0.06);
+  --ps-shadow-surface-hover: 0 6px 16px rgba(31, 42, 55, 0.1);
+  --ps-focus-ring: 0 0 0 3px rgba(52, 152, 219, 0.35);
+  --ps-transition: 160ms ease;
+}
+
+// ---------------------------------------------------------------------------
+// Remapeo de Bootstrap a la marca
+// ---------------------------------------------------------------------------
+
+:root {
+  --bs-primary: var(--ps-blue-600);
+  --bs-primary-rgb: 31, 107, 156;
+  --bs-link-color: var(--ps-blue-600);
+  --bs-link-color-rgb: 31, 107, 156;
+  --bs-link-hover-color: var(--ps-blue-700);
+  --bs-link-hover-color-rgb: 21, 83, 124;
+  --bs-body-color: var(--ps-ink);
+  --bs-body-bg: var(--ps-surface);
+  --bs-border-color: var(--ps-border);
+  --bs-focus-ring-color: rgba(52, 152, 219, 0.35);
+  --bs-emphasis-color: var(--ps-ink);
+  --bs-secondary-color: var(--ps-ink-muted);
+}
+
+// ---------------------------------------------------------------------------
+// Tipografía — styles.md §3
+// ---------------------------------------------------------------------------
+//
+// Una sola familia; toda la jerarquía por peso y tamaño. Se mantiene la pila
+// del sistema hasta que se auto-aloje Inter (styles.md §3, §12).
+
+body {
+  color: var(--ps-ink);
+  line-height: 1.6;
+}
+
+h1,
+.h1 {
+  font-size: clamp(1.5rem, 2.5vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ps-ink);
+}
+
+h2,
+.h2 {
+  font-size: clamp(1.35rem, 2.2vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ps-ink);
+}
+
+h3,
+.h3,
+h4,
+.h4 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--ps-ink);
+}
+
+h5,
+.h5,
+h6,
+.h6 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ps-ink);
+}
+
+small,
+.small,
+.text-muted {
+  font-size: 0.875rem;
+  color: var(--ps-ink-soft) !important;
+}
+
+// Cifras tabulares — §3. Obligatorio en toda puntuación, fecha y celda
+// numérica: sin esto la columna de `score / total` baila entre filas.
+.ps-num,
+.ps-score,
+.ps-pill--points,
+table.table td,
+table.table th {
+  font-variant-numeric: tabular-nums;
+}
+
+hr {
+  border-color: var(--ps-border);
+  opacity: 1;
+}
+
+// Iconos — §7. Se insertan como SVG en línea (helper `bi_icon`), no como
+// fuente, así que necesitan la corrección de línea base que la hoja de
+// Bootstrap Icons aplicaba por su cuenta.
+.bi {
+  vertical-align: -0.125em;
+  flex-shrink: 0;
+}
+
+// ---------------------------------------------------------------------------
+// Botones — styles.md §6.5
+// ---------------------------------------------------------------------------
+
+.btn {
+  --bs-btn-border-radius: var(--ps-radius-control);
+  --bs-btn-font-weight: 500;
+  transition: var(--ps-transition);
+}
+
+.btn:focus-visible {
+  box-shadow: var(--ps-focus-ring);
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--ps-blue-600);
+  --bs-btn-border-color: var(--ps-blue-600);
+  --bs-btn-hover-bg: var(--ps-blue-500);
+  --bs-btn-hover-border-color: var(--ps-blue-500);
+  --bs-btn-active-bg: var(--ps-blue-700);
+  --bs-btn-active-border-color: var(--ps-blue-700);
+  --bs-btn-disabled-bg: var(--ps-blue-200);
+  --bs-btn-disabled-border-color: var(--ps-blue-200);
+  --bs-btn-disabled-color: #ffffff;
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--ps-blue-600);
+  --bs-btn-border-color: var(--ps-blue-600);
+  --bs-btn-hover-bg: var(--ps-blue-600);
+  --bs-btn-hover-border-color: var(--ps-blue-600);
+  --bs-btn-active-bg: var(--ps-blue-700);
+  --bs-btn-active-border-color: var(--ps-blue-700);
+}
+
+.btn-secondary {
+  --bs-btn-color: var(--ps-ink);
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: var(--ps-border);
+  --bs-btn-hover-color: var(--ps-ink);
+  --bs-btn-hover-bg: var(--ps-canvas);
+  --bs-btn-hover-border-color: var(--ps-ink-soft);
+  --bs-btn-active-color: var(--ps-ink);
+  --bs-btn-active-bg: var(--ps-border);
+  --bs-btn-active-border-color: var(--ps-ink-soft);
+}
+
+.btn-success {
+  --bs-btn-bg: var(--ps-success);
+  --bs-btn-border-color: var(--ps-success);
+  --bs-btn-hover-bg: #126a33;
+  --bs-btn-hover-border-color: #126a33;
+  --bs-btn-active-bg: #0f5a2b;
+  --bs-btn-active-border-color: #0f5a2b;
+}
+
+// El "editar" del sistema no es una advertencia: es una acción secundaria de
+// intención, así que toma el azul y no el ámbar (§1.5: el ámbar sólo es tiempo).
+.btn-warning {
+  --bs-btn-color: var(--ps-blue-700);
+  --bs-btn-bg: var(--ps-blue-50);
+  --bs-btn-border-color: var(--ps-blue-200);
+  --bs-btn-hover-color: #ffffff;
+  --bs-btn-hover-bg: var(--ps-blue-600);
+  --bs-btn-hover-border-color: var(--ps-blue-600);
+  --bs-btn-active-color: #ffffff;
+  --bs-btn-active-bg: var(--ps-blue-700);
+  --bs-btn-active-border-color: var(--ps-blue-700);
+}
+
+.btn-danger {
+  --bs-btn-bg: var(--ps-danger);
+  --bs-btn-border-color: var(--ps-danger);
+  --bs-btn-hover-bg: #9f1616;
+  --bs-btn-hover-border-color: #9f1616;
+  --bs-btn-active-bg: #881212;
+  --bs-btn-active-border-color: #881212;
+}
+
+.btn-outline-danger {
+  --bs-btn-color: var(--ps-danger);
+  --bs-btn-border-color: var(--ps-danger);
+  --bs-btn-hover-bg: var(--ps-danger);
+  --bs-btn-hover-border-color: var(--ps-danger);
+}
+
+// `btn-info` marca "consultar resultado": es navegación, no una alerta.
+.btn-info {
+  --bs-btn-color: var(--ps-blue-700);
+  --bs-btn-bg: var(--ps-blue-50);
+  --bs-btn-border-color: var(--ps-blue-200);
+  --bs-btn-hover-color: #ffffff;
+  --bs-btn-hover-bg: var(--ps-blue-600);
+  --bs-btn-hover-border-color: var(--ps-blue-600);
+  --bs-btn-active-color: #ffffff;
+  --bs-btn-active-bg: var(--ps-blue-700);
+  --bs-btn-active-border-color: var(--ps-blue-700);
+}
+
+.btn-outline-secondary {
+  --bs-btn-color: var(--ps-ink-muted);
+  --bs-btn-border-color: var(--ps-border);
+  --bs-btn-hover-color: var(--ps-ink);
+  --bs-btn-hover-bg: var(--ps-canvas);
+  --bs-btn-hover-border-color: var(--ps-ink-soft);
+}
+
+// ---------------------------------------------------------------------------
+// Píldoras de estado — styles.md §6.4
+// ---------------------------------------------------------------------------
+//
+// Cada píldora es un par texto + fondo y lleva SIEMPRE texto: el color
+// acompaña, nunca sustituye (§1.5, §9).
+
+.ps-pill {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--ps-radius-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.ps-pill--done {
+  color: var(--ps-success);
+  background-color: var(--ps-success-bg);
+  border-color: rgba(21, 128, 61, 0.2);
+}
+
+// La única píldora ámbar del sistema: convocatoria abierta o entrega en curso.
+.ps-pill--live {
+  color: var(--ps-live);
+  background-color: var(--ps-live-bg);
+  border-color: rgba(180, 83, 9, 0.25);
+}
+
+.ps-pill--closed {
+  color: var(--ps-neutral);
+  background-color: var(--ps-neutral-bg);
+  border-color: rgba(71, 85, 105, 0.18);
+}
+
+.ps-pill--scheduled {
+  color: var(--ps-info);
+  background-color: var(--ps-info-bg);
+  border-color: rgba(31, 107, 156, 0.2);
+}
+
+// Valor en puntos de una pregunta. Sustituye al `badge bg-info`, que daba
+// 1.96:1 de contraste (§2, reglas duras).
+.ps-pill--points {
+  color: var(--ps-blue-700);
+  background-color: var(--ps-blue-100);
+  border-color: var(--ps-blue-200);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+// ---------------------------------------------------------------------------
+// Puntuación — styles.md §6.4
+// ---------------------------------------------------------------------------
+//
+// No es una píldora: es el dato protagonista de la pantalla del alumno. La
+// cifra manda y el máximo va al lado para que nunca se lea sin su escala.
+
+.ps-score {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.ps-score__value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ps-blue-700);
+  line-height: 1.2;
+}
+
+.ps-score__total {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ps-ink-soft);
+}
+
+// ---------------------------------------------------------------------------
+// Superficies: tarjetas, tablas, listas — styles.md §6.3, §6.6, §6.7
+// ---------------------------------------------------------------------------
+
+.card {
+  --bs-card-bg: var(--ps-surface);
+  --bs-card-border-color: var(--ps-border);
+  --bs-card-border-radius: var(--ps-radius-surface);
+  --bs-card-inner-border-radius: calc(var(--ps-radius-surface) - 1px);
+  --bs-card-cap-bg: var(--ps-canvas);
+  box-shadow: var(--ps-shadow-surface);
+}
+
+.card-header {
+  border-bottom-color: var(--ps-border);
+}
+
+.table {
+  --bs-table-color: var(--ps-ink);
+  --bs-table-bg: var(--ps-surface);
+  --bs-table-border-color: var(--ps-border);
+  --bs-table-striped-bg: var(--ps-canvas);
+  --bs-table-striped-color: var(--ps-ink);
+  --bs-table-hover-bg: var(--ps-blue-50);
+  --bs-table-hover-color: var(--ps-ink);
+  --bs-table-cell-padding-y: 0.75rem;
+}
+
+.table > thead th {
+  color: var(--ps-ink-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom-width: 1px;
+  border-bottom-color: var(--ps-border);
+  white-space: nowrap;
+}
+
+.list-group {
+  --bs-list-group-border-color: var(--ps-border);
+  --bs-list-group-color: var(--ps-ink);
+  --bs-list-group-bg: transparent;
+}
+
+// ---------------------------------------------------------------------------
+// Alertas — styles.md §6.10
+// ---------------------------------------------------------------------------
+
+.alert {
+  --bs-alert-border-radius: var(--ps-radius-surface);
+  border-width: 1px;
+}
+
+.alert-info {
+  --bs-alert-color: var(--ps-info);
+  --bs-alert-bg: var(--ps-info-bg);
+  --bs-alert-border-color: rgba(31, 107, 156, 0.2);
+}
+
+// El aviso de plazo (abierto / aún no abierto / cerrado) es tiempo: ámbar.
+.alert-warning {
+  --bs-alert-color: var(--ps-live);
+  --bs-alert-bg: var(--ps-live-bg);
+  --bs-alert-border-color: rgba(180, 83, 9, 0.25);
+}
+
+.alert-danger {
+  --bs-alert-color: var(--ps-danger);
+  --bs-alert-bg: var(--ps-danger-bg);
+  --bs-alert-border-color: rgba(185, 28, 28, 0.2);
+}
+
+.alert-success {
+  --bs-alert-color: var(--ps-success);
+  --bs-alert-bg: var(--ps-success-bg);
+  --bs-alert-border-color: rgba(21, 128, 61, 0.2);
+}
+
+// Contenedor de los mensajes flash del layout.
+.ps-flash .alert {
+  margin-bottom: 1rem;
+}
+
+// ---------------------------------------------------------------------------
+// Formularios — styles.md §6.8
+// ---------------------------------------------------------------------------
+
+.form-control,
+.form-select {
+  border-radius: var(--ps-radius-control);
+  border-color: var(--ps-border);
+  color: var(--ps-ink);
+  transition: var(--ps-transition);
+}
+
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+  border-color: var(--ps-blue-400);
+  box-shadow: var(--ps-focus-ring);
+}
+
+.form-check-input:checked {
+  background-color: var(--ps-blue-600);
+  border-color: var(--ps-blue-600);
+}
+
+label,
+.form-label,
+.control-label {
+  font-weight: 500;
+  color: var(--ps-ink-muted);
+  margin-bottom: 0.25rem;
+}
+
+// Marca de campo obligatorio que añade simple_form. Va discreta y sin el
+// subrayado punteado que el navegador le pone a <abbr> por defecto.
+label abbr[title] {
+  text-decoration: none;
+  border-bottom: 0;
+  color: var(--ps-danger);
+  cursor: help;
+}
+
+.form-text {
+  color: var(--ps-ink-soft);
+  font-size: 0.8125rem;
+}
+
+// Fila de una opción de respuesta: el campo crece y los controles se alinean
+// a su derecha, sin el margen inferior que los wrappers ponen por defecto.
+.ps-option-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.ps-option-row .input {
+  margin-bottom: 0;
+}
+
+.ps-option-row .form-check {
+  margin-bottom: 0;
+}
+
+// simple_form pinta el mensaje de error del campo como `span.error`.
+.error,
+.invalid-feedback {
+  color: var(--ps-danger);
+  font-size: 0.875rem;
+}
+
+// ---------------------------------------------------------------------------
+// Barra de navegación — styles.md §6.1
+// ---------------------------------------------------------------------------
+//
+// Carcasa oscura: la navegación es estructura, no contenido, y así el azul de
+// marca queda libre para lo accionable dentro de la página (§1.3).
+
+.navbar {
+  --bs-navbar-color: rgba(235, 237, 240, 0.75);
+  --bs-navbar-hover-color: #ffffff;
+  --bs-navbar-active-color: var(--ps-amber-300);
+  --bs-navbar-brand-color: #ffffff;
+  --bs-navbar-brand-hover-color: #ffffff;
+  --bs-navbar-toggler-border-color: rgba(235, 237, 240, 0.3);
+  --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255,255,255,0.85%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  background-color: var(--ps-blue-900);
+  border-bottom: 1px solid var(--ps-blue-700);
+}
+
+.navbar .navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.navbar .nav-link {
+  border-radius: var(--ps-radius-control);
+  padding-inline: 0.75rem;
+  transition: var(--ps-transition);
+}
+
+.navbar .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.navbar .nav-link.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  font-weight: 600;
+}
+
+.navbar .dropdown-menu {
+  --bs-dropdown-border-color: var(--ps-border);
+  --bs-dropdown-border-radius: var(--ps-radius-control);
+  --bs-dropdown-link-active-bg: var(--ps-blue-600);
+  box-shadow: var(--ps-shadow-surface-hover);
+}
+
+// Logotipo del lockup de la navbar — §1.6, §4.
+.navbar-brand .ps-logo {
+  height: 28px;
+  width: 28px;
+}
+
+// ---------------------------------------------------------------------------
+// Menú lateral — styles.md §6.2
+// ---------------------------------------------------------------------------
+
+.left-menu h4 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ps-ink-soft);
+  margin-bottom: 0.75rem;
+}
+
+.left-menu .nav-link {
+  color: var(--ps-ink-muted);
+  border-radius: var(--ps-radius-control);
+  padding: 0.4rem 0.6rem;
+  transition: var(--ps-transition);
+}
+
+.left-menu .nav-link:hover {
+  background-color: var(--ps-blue-50);
+  color: var(--ps-blue-700);
+}
+
+.left-menu .nav-link.active {
+  background-color: var(--ps-blue-50);
+  color: var(--ps-blue-700);
+  font-weight: 600;
+}
+
+.left-menu .nav-link.text-danger:hover {
+  background-color: var(--ps-danger-bg);
+  color: var(--ps-danger) !important;
+}
+
+// ---------------------------------------------------------------------------
+// Cabecera de página — styles.md §5
+// ---------------------------------------------------------------------------
+//
+// Jerarquía canónica: título + acción primaria, regla, contenido.
+
+.ps-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ps-page-header h1,
+.ps-page-header h2 {
+  margin-bottom: 0;
+}
+
+// Bloque de filtros: superficie propia, entre la cabecera y el listado (§6.9).
+.ps-filters {
+  background-color: var(--ps-canvas);
+  border: 1px solid var(--ps-border);
+  border-radius: var(--ps-radius-surface);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+// ---------------------------------------------------------------------------
+// Pantallas de autenticación (Devise) — styles.md §6.12
+// ---------------------------------------------------------------------------
+//
+// Sin menú lateral: el contenido se centra sobre el lienzo en una columna
+// legible, y cada bloque es una tarjeta blanca. Es la primera pantalla que ve
+// nadie, así que es donde el logotipo tiene que aparecer a tamaño de marca.
+
+.content-area.ps-auth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: clamp(1.5rem, 6vh, 4rem) 1rem;
+  background-color: var(--ps-canvas);
+}
+
+.content-area.ps-auth > * {
+  width: 100%;
+  max-width: 26rem;
+}
+
+.ps-auth-card {
+  background-color: var(--ps-surface);
+  border: 1px solid var(--ps-border);
+  border-radius: var(--ps-radius-surface);
+  box-shadow: var(--ps-shadow-surface);
+  padding: clamp(1.5rem, 4vw, 2rem);
+}
+
+// Marca dentro de la tarjeta: símbolo grande sobre el título.
+.ps-auth-card__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.ps-auth-card__brand .ps-logo {
+  height: 40px;
+  width: 40px;
+}
+
+.ps-auth-card__brand-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  color: var(--ps-ink);
+}
+
+.ps-auth-card__title {
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ps-ink);
+  margin-bottom: 0.25rem;
+}
+
+.ps-auth-card__lead {
+  color: var(--ps-ink-muted);
+  font-size: 0.9375rem;
+  margin-bottom: 1.5rem;
+}
+
+// simple_form envuelve cada campo en `.input`; aquí se separan holgados
+// porque el formulario es corto y no compite con nada.
+.ps-auth-card .form-inputs .input {
+  margin-bottom: 1rem;
+}
+
+.ps-auth-card .form-inputs .boolean {
+  margin-bottom: 0;
+}
+
+.ps-auth-card .form-actions {
+  margin-top: 1.5rem;
+}
+
+// Pie de enlaces: uno por línea, discretos, separados de la tarjeta.
+.ps-auth-links {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--ps-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+}
+
+.ps-auth-links a {
+  color: var(--ps-blue-600);
+  text-decoration: none;
+}
+
+.ps-auth-links a:hover {
+  color: var(--ps-blue-700);
+  text-decoration: underline;
+}
+
+// Bloque de baja: acción destructiva, separada del resto y sin protagonismo.
+.ps-auth-card--danger {
+  border-color: rgba(185, 28, 28, 0.25);
+}
+
+.ps-auth-card--danger .ps-auth-card__title {
+  font-size: 1.05rem;
+  color: var(--ps-danger);
+}
+
+// Resumen de errores de Devise (`devise/shared/_error_messages`).
+#error_explanation {
+  background-color: var(--ps-danger-bg);
+  border: 1px solid rgba(185, 28, 28, 0.2);
+  border-radius: var(--ps-radius-control);
+  color: var(--ps-danger);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+}
+
+#error_explanation h2 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ps-danger);
+  margin-bottom: 0.35rem;
+}
+
+#error_explanation ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.9375rem;
+}
+
+// Paginación (§6.3).
+.pagination {
+  --bs-pagination-color: var(--ps-blue-600);
+  --bs-pagination-hover-color: var(--ps-blue-700);
+  --bs-pagination-hover-bg: var(--ps-blue-50);
+  --bs-pagination-active-bg: var(--ps-blue-600);
+  --bs-pagination-active-border-color: var(--ps-blue-600);
+  --bs-pagination-border-color: var(--ps-border);
+  --bs-pagination-border-radius: var(--ps-radius-control);
+}

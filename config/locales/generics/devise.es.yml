@@ -13,6 +13,13 @@ es:
     cancel_account_title: "Cancelar mi cuenta"
     cancel_account_button: "Cancelar mi cuenta"
     cancel_account_confirm: "¿Estás seguro?"
+    # Textos de apoyo de las tarjetas de autenticación — docs/styles.md §6.12.
+    # Se nombra qué hace la pantalla, sin exclamaciones (§1.7).
+    log_in_lead: "Accede para ver tus convocatorias y tus entregas."
+    sign_up_lead: "Crea una cuenta para acceder a los exámenes."
+    update_account_lead: "Cambia tu correo o tu contraseña. Necesitas la contraseña actual para confirmar los cambios."
+    cancel_account_lead: "Se eliminará tu cuenta junto con tus entregas y sus puntuaciones. No se puede deshacer."
+    pending_confirmation: "Pendiente de confirmar la dirección %{email}."
     back: "Volver"
     log_in_title: "Iniciar sesión"
     remember_me: "Recuérdame"
@@ -30,6 +37,16 @@ es:
     forgot_password_title: "¿Olvidaste tu contraseña?"
     send_reset_instructions_button: "Enviarme instrucciones para restablecer la contraseña"
     minimum_length_hint: "%{count} caracteres mínimo"
+    new_lead: "Escribe tu correo y te enviaremos un enlace para restablecerla."
+    edit_lead: "Elige una contraseña nueva para tu cuenta."
+  confirmations:
+    resend_title: "Reenviar la confirmación"
+    resend_lead: "Te enviaremos otra vez las instrucciones para confirmar tu dirección."
+    resend_button: "Reenviar instrucciones"
+  unlocks:
+    resend_title: "Desbloquear la cuenta"
+    resend_lead: "Te enviaremos las instrucciones para desbloquear tu cuenta."
+    resend_button: "Reenviar instrucciones"
   errors:
     messages:
       expired: "ha expirado, por favor pide una nueva"

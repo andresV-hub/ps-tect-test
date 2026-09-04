@@ -1,0 +1,17 @@
+/ Mensajes flash — docs/styles.md §6.10.
+/
+/ El layout no los pintaba: los controladores llevaban tiempo poniendo `notice`
+/ y `alert` que nunca llegaban a verse. Cada mensaje lleva icono y texto, nunca
+/ sólo color (§9).
+- default_style = %w[alert-info info-circle-fill]
+- flash_styles = { "notice" => %w[alert-success check-circle-fill], "success" => %w[alert-success check-circle-fill], "alert" => %w[alert-danger exclamation-triangle-fill], "error" => %w[alert-danger exclamation-triangle-fill] }
+
+- if flash.any?
+  .ps-flash
+    - flash.each do |type, message|
+      - next if message.blank?
+      - style, icon = flash_styles.fetch(type.to_s, default_style)
+      div class="alert #{style} alert-dismissible fade show d-flex align-items-start" role="alert"
+        = bi_icon(icon, class: "me-2 mt-1")
+        .flex-grow-1 = message
+        button.btn-close type="button" data-bs-dismiss="alert" aria-label=t('actions.close')

@@ -1,25 +1,55 @@
-/ app/views/layouts/_navbar.html.slim (or wherever your navbar is)
-nav.navbar.navbar-expand-lg.navbar-light.bg-light
-  .container-fluid
-    - if user_signed_in?
-      = link_to t('navigation.home'), root_path, class: 'navbar-brand'
-      ul.navbar-nav
-        li.nav-item
-          = link_to t('navigation.exams'), exams_path, class: 'nav-link'
-        - if current_user.admin?
-          li.nav-item
-            = link_to t('navigation.analytics'), analytics_path, class: 'nav-link'
+/ Barra de navegación — docs/styles.md §6.1
+/
+/ Carcasa oscura sobre --ps-blue-900: la navegación es estructura, no
+/ contenido, y así el azul de marca queda libre para lo accionable dentro de
+/ la página. El enlace de la sección activa se marca en ámbar (§6.1).
+/
+/ JS hooks preserved: #userDropdown y los data-bs-* de dropdown/collapse/
+/ offcanvas los consume el JS de Bootstrap. No renombrar.
+- has_side_menu = local_assigns.fetch(:has_side_menu, false)
 
-      ul.navbar-nav.ms-auto
-        li.nav-item.dropdown
-          a.nav-link.dropdown-toggle href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
-            = current_user.email
-          ul.dropdown-menu.dropdown-menu-end aria-labelledby="userDropdown"
-            li
-              = link_to t('navigation.logout'), destroy_user_session_path, method: :delete, class: 'dropdown-item'
-    - else
-      ul.navbar-nav.ms-auto
-        li.nav-item
-          = link_to t('navigation.login'), new_user_session_path, class: 'nav-link'
-        li.nav-item
-          = link_to t('navigation.sign_up'), new_user_registration_path, class: 'nav-link'
+nav.navbar.navbar-expand-lg data-bs-theme="dark"
+  .container-fluid
+    - if has_side_menu
+      button#appSideMenuToggle.navbar-toggler.border-0.d-lg-none.me-2 type="button" data-bs-toggle="offcanvas" data-bs-target="#appSideMenu" aria-controls="appSideMenu" aria-label=t('navigation.toggle_side_menu')
+        = bi_icon("list")
+
+    = link_to root_path, class: 'navbar-brand' do
+      = image_tag "logo-on-dark.svg", class: "ps-logo", alt: "", aria: { hidden: true }
+      span = t('navigation.brand')
+
+    button.navbar-toggler type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label=t('navigation.toggle_nav')
+      span.navbar-toggler-icon
+
+    #mainNav.collapse.navbar-collapse
+      - if user_signed_in?
+        ul.navbar-nav
+          li.nav-item
+            = link_to t('navigation.home'), root_path, class: ['nav-link', ('active' if controller_name == 'static_pages')]
+          li.nav-item
+            = link_to t('navigation.exams'), exams_path, class: ['nav-link', ('active' if controller_name == 'exams')]
+          - if current_user.student?
+            li.nav-item
+              = link_to t('navigation.my_exams'), user_exams_path, class: ['nav-link', ('active' if controller_name == 'user_exams')]
+          - if current_user.admin?
+            li.nav-item
+              = link_to t('navigation.analytics'), analytics_path, class: ['nav-link', ('active' if controller_name == 'analytics')]
+
+        ul.navbar-nav.ms-auto
+          li.nav-item.dropdown
+            a#userDropdown.nav-link.dropdown-toggle href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+              = bi_icon("person-circle", class: "me-1")
+              = current_user.email
+            ul.dropdown-menu.dropdown-menu-end aria-labelledby="userDropdown"
+              li
+                = link_to t('navigation.edit_account'), edit_user_registration_path, class: 'dropdown-item'
+              li
+                hr.dropdown-divider
+              li
+                = link_to t('navigation.logout'), destroy_user_session_path, data: { turbo_method: :delete }, class: 'dropdown-item'
+      - else
+        ul.navbar-nav.ms-auto
+          li.nav-item
+            = link_to t('navigation.login'), new_user_session_path, class: 'nav-link'
+          li.nav-item
+            = link_to t('navigation.sign_up'), new_user_registration_path, class: 'nav-link'

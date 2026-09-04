@@ -14,15 +14,15 @@ class Question < ApplicationRecord
   validate :no_options_for_text_type, if: :text?
 
   def text?
-    question_type == 'text'
+    question_type == "text"
   end
 
   def multiple_choice?
-    question_type == 'multiple_choice'
+    question_type == "multiple_choice"
   end
 
   def single_choice?
-    question_type == 'single_choice'
+    question_type == "single_choice"
   end
 
   def scorable?
@@ -57,5 +57,4 @@ class Question < ApplicationRecord
       errors.add(:question_options, :cannot_have_options_for_text_type)
     end
   end
-
 end

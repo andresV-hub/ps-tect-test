@@ -37,3 +37,7 @@
 !/app/assets/builds/.keep
 
 /node_modules
+
+# Estado local de herramientas de agentes.
+.omc/
+/.claude/settings.local.json

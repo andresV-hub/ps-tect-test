@@ -1,8 +1,13 @@
 es:
   time:
     formats:
+      # Formato canónico de fecha y hora del producto — docs/styles.md §3.
+      # Toda vista usa `l(fecha, format: :short)`; nada de strftime suelto.
+      short: "%d/%m/%Y %H:%M"
       long: "%d de %B de %Y"
   date:
+    formats:
+      short: "%d/%m/%Y"
     month_names:
       - ~
       - Enero

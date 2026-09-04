@@ -1,0 +1,36 @@
+# Local development environment.
+# Usage:
+#   docker compose up --build      # boot the app on http://localhost:3000
+#   PORT=3001 docker compose up        # ...on a different host port
+#   docker compose run --rm web ./bin/rails console
+#   docker compose run --rm web ./bin/rails test
+#
+# Production images are built from ./Dockerfile and deployed with Kamal.
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: bash -c "rm -f tmp/pids/server.pid && ./bin/rails db:prepare && ./bin/rails server -b 0.0.0.0 -p 3000"
+    environment:
+      RAILS_ENV: development
+      # Bind the debugger to the container interface so `docker attach` works.
+      RUBY_DEBUG_OPEN: "true"
+      RUBY_DEBUG_HOST: 0.0.0.0
+    ports:
+      - "${PORT:-3000}:3000"
+      - "${DEBUG_PORT:-12345}:12345" # ruby/debug
+    volumes:
+      # Only the application code is bind-mounted. Gems live in the image, so a
+      # Gemfile change is picked up by `docker compose up --build` rather than
+      # leaving a stale volume shadowing the freshly built ones.
+      - .:/rails
+    stdin_open: true
+    tty: true
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:3000/up"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 60s

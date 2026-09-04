@@ -1,18 +1,20 @@
+/ Menú lateral de la sección de exámenes — docs/styles.md §6.2.
+/ El enlace de la vista actual va marcado con `active` (fondo --ps-blue-50).
 nav.p-3
   h4 = t('activerecord.plural.exams')
   ul.nav.flex-column
     li.nav-item
-      = link_to t('all_exams'), exams_path, class: "nav-link"
+      = link_to t('all_exams'), exams_path, class: ['nav-link', ('active' if current_page?(exams_path))]
     - if current_user.student?
       li.nav-item
-        = link_to t('navigation.user_examd'), user_exams_path, class: 'nav-link'
+        = link_to t('navigation.my_exams'), user_exams_path, class: ['nav-link', ('active' if current_page?(user_exams_path))]
     - if current_user.admin?
       li.nav-item
-        = link_to t('create_new_exam'), new_exam_path, class: "nav-link"
+        = link_to t('create_new_exam'), new_exam_path, class: ['nav-link', ('active' if current_page?(new_exam_path))]
       - if @exam&.persisted?
         li.nav-item
-          = link_to "#{t('actions.show')} #{@exam.title}", exam_path(@exam.id), class: "nav-link"
+          = link_to "#{t('actions.show')} #{@exam.title}", exam_path(@exam.id), class: ['nav-link', ('active' if current_page?(exam_path(@exam.id)))]
         li.nav-item
-          = link_to "#{t('actions.edit')} #{@exam.title}", edit_exam_path(@exam.id), class: "nav-link"
+          = link_to "#{t('actions.edit')} #{@exam.title}", edit_exam_path(@exam.id), class: ['nav-link', ('active' if current_page?(edit_exam_path(@exam.id)))]
         li.nav-item
-          = link_to "#{t('actions.delete')} #{@exam.title}", exam_path(@exam), method: :delete, data: { confirm: t('activerecord.messages.exam.destroy')}, class: "nav-link text-danger"
+          = link_to "#{t('actions.delete')} #{@exam.title}", exam_path(@exam), data: { turbo_method: :delete, turbo_confirm: t('activerecord.messages.exam.destroy') }, class: "nav-link text-danger"

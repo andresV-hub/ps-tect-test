@@ -1,4 +1,16 @@
-.logo {
-  width: 11dvw;
-  height: auto;
+// Reglas genéricas previas a Bootstrap.
+//
+// La antigua `.logo { width: 11dvw }` se retira: era un ancho dependiente del
+// viewport (211px a 1920px, 41px a 375px) y además no la usaba ninguna vista.
+// El logotipo pasa a `.ps-logo` con altura fija — docs/styles.md §4, §8.
+
+// El símbolo es cuadrado (viewBox 512x512), así que se le da ancho explícito:
+// con `width: auto` el navegador toma el ancho intrínseco (512px) como base
+// flexible y, dentro de un contenedor flex como `.navbar-brand`, lo encoge
+// hasta hacerlo desaparecer. `flex: none` evita además que se comprima.
+.ps-logo {
+  height: 32px;
+  width: 32px;
+  flex: none;
+  display: block;
 }

@@ -1,31 +1,43 @@
+/ Campos anidados de una pregunta — docs/styles.md §6.6 (tarjeta de campos
+/ anidados) y §6.8 (formularios).
+/
+/ Densidad de admin (§1.5): compone, así que los controles van compactos.
+/
+/ JS hooks preserved (app/javascript/src/question_form_logic.js) — NO renombrar:
+/   .nested-fields, data-question-type, .question-type-select,
+/   .scorable-checkbox, .score-input, .score-input-group, .options-fields
 .nested-fields.card.card-body.mb-3 data-question-type=(f.object.question_type || 'text')
-  .row
-    .col-md-2
-      .form-check
-        = f.check_box :scorable, class: "form-check-input scorable-checkbox"
-        = f.label :scorable, t('is_scorable_label'), class: "form-check-label"
-    .col-md-7
-      .score-input-group
-        = f.input :score, as: :integer, label: t('score_value_label'), input_html: { class: "score-input" }, required: false
-    .col-md-3
+  .row.g-3.align-items-end
+    .col-md-5
       = f.input :question_type,
               label: t('activerecord.attributes.question.question_type'),
               collection: Question::VALID_QUESTION_TYPES.map { |type| [t("enums.question.question_type.#{type}"), type] },
               prompt: t('select_type_prompt'),
               input_html: { class: "form-select question-type-select" }
-  .row
-    = f.label :content
-    = f.input :content, label: false
+    .col-md-3
+      .form-check.mb-2
+        = f.check_box :scorable, class: "form-check-input scorable-checkbox"
+        = f.label :scorable, t('is_scorable_label'), class: "form-check-label"
+    .col-md-4
+      .score-input-group
+        = f.input :score, as: :integer, label: t('score_value_label'), input_html: { class: "score-input" }, required: false
+
+  .row.mt-3
+    .col-12
+      = f.input :content, label: Question.human_attribute_name(:content)
+
   .options-fields.mt-3
     h6 = t('options_heading')
     #options-container
       - if f.object.errors.messages[:question_options].present?
         .alert.alert-danger.mt-2
-          ul
+          ul.mb-0
             - f.object.errors.messages[:question_options].each do |message|
               li = message
       = f.simple_fields_for :question_options do |option_fields|
         = render 'question_option_fields', f: option_fields
       .links.mt-2
-        = link_to_add_association t('add_option'), f, :question_options, class: "btn btn-outline-secondary btn-sm"
-        = link_to_remove_association t('remove_question'), f, class: "btn btn-outline-danger btn-sm"
+        = link_to_add_association t('add_option'), f, :question_options, class: "btn btn-outline-secondary btn-sm me-2"
+
+  .d-flex.justify-content-end.mt-3
+    = link_to_remove_association t('remove_question'), f, class: "btn btn-outline-danger btn-sm"

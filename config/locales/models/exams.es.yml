@@ -1,7 +1,12 @@
 es:
-  all_exams: "Todos los Exámenes"
-  create_new_exam: "Crear Nuevo Examen"
+  all_exams: "Todos los exámenes"
+  create_new_exam: "Crear examen"
   no_exams_found: "No se encontraron exámenes."
+  exams:
+    # Mensajes flash emitidos por ExamsController / UserExamsController.
+    # Se nombra el estado y su causa — docs/styles.md §1.7.
+    not_found_alert: "Ese examen ya no existe."
+    not_available_alert: "Ese examen no está abierto ahora mismo, así que no puedes responderlo."
   delete_exam_confirmation: "¿Estás seguro de que quieres eliminar este examen?"
   activerecord:
     models:
@@ -27,19 +32,25 @@ es:
           end_date_desc: "Fecha de fin (más reciente primero)"
     messages:
       exam:
-        total_possible_score_label: "Puntuación total posible:"
+        total_possible_score_label: "Puntuación total posible"
         no_questions_for_this_exam_yet: "Aún no hay preguntas para este examen."
-        question_number: "%{index}. %{content}"
+        # Clave canónica para numerar preguntas en TODAS las vistas — §1.7:
+        # no se alternan sinónimos entre pantallas.
+        question_number: "Pregunta %{index}: %{content}"
         points:
           one: "%{score} punto"
           other: "%{score} puntos"
         type_label: "Tipo:"
-        view_my_results: "Ver Mis Resultados"
+        view_my_results: "Ver mis resultados"
         continue_exam: "Continuar examen"
-        take_exam: "Realizar Examen"
-        this_exam_has_ended: "Este examen ha finalizado."
-        this_exam_not_yet_available: "Este examen aún no está disponible."
+        take_exam: "Realizar examen"
+        # Se nombra el estado y su causa, nunca sólo el estado — docs/styles.md §1.7
+        this_exam_has_ended: "Este examen finalizó el %{date}."
+        this_exam_not_yet_available: "Este examen estará disponible a partir del %{date}."
+        this_exam_is_open: "Disponible hasta el %{date}."
         free_text_answer: "(Respuesta de texto libre)"
+        results_heading: "Resultados"
+        no_students_have_taken_this_exam_yet: "Ningún alumno ha entregado este examen todavía."
         destroy: "¿Estás seguro de que quieres eliminar este examen? Esta acción es irreversible."
     errors:
       models:

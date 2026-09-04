@@ -1,5 +1,7 @@
+/ Listado de mis entregas — docs/styles.md §6.3 (tablas), §6.4 (píldoras y
+/ puntuación). La puntuación nunca se muestra sin su máximo al lado.
 - if user_exams.empty?
-  .alert.alert-info You haven't completed any exams yet.
+  .alert.alert-info = t('activerecord.user_exam.messages.no_user_exams_yet')
 - else
   .table-responsive
     table.table.table-hover.table-striped
@@ -15,15 +17,17 @@
             td = link_to user_exam.exam.title, user_exam_path(user_exam)
             td
               - if user_exam.completed_at.present?
-                = "#{user_exam.score.round(2)} / #{user_exam.exam.total_score.round(2)}"
+                span.ps-score
+                  span.ps-score__value = number_with_precision(user_exam.score, precision: 2)
+                  span.ps-score__total = "/ #{number_with_precision(user_exam.exam.total_score, precision: 2)}"
               - else
-                span.badge.bg-warning.text-dark = t('activerecord.user_exam.attributes.status_badge.in_progress')
+                span.ps-pill.ps-pill--live = t('activerecord.user_exam.attributes.status_badge.in_progress')
             td
               - if user_exam.completed_at.present?
-                = user_exam.completed_at.strftime("%d/%m/%Y %H:%M")
+                = l(user_exam.completed_at, format: :short)
               - else
-                | N/A
-            td
+                span.text-muted = "—"
+            td.text-nowrap
               - if user_exam.completed_at.present?
                 = link_to t('activerecord.messages.exam.view_my_results'), user_exam_path(user_exam), class: "btn btn-info btn-sm"
               - else

@@ -1,40 +1,68 @@
-h2 = "Responder examen: #{@user_exam.exam.title}"
+/ Formulario de entrega — docs/styles.md §5 (jerarquía), §6.6 (una tarjeta por
+/ pregunta) y §6.8 (formularios).
+/
+/ La mecánica del formulario se conserva intacta a propósito: los nombres de
+/ parámetro (`user_exam[user_answers_attributes][i][question_option_ids][]`) y
+/ los `id` de cada control los espera UserExamsController. Esta pasada cambia
+/ estructura visual y textos, no el contrato con el controlador.
+/
+/ Densidad de alumno (§1.5): cada pregunta respira, con espacio para leerla.
+.mt-4
+  .ps-page-header
+    h1 = t('user_exams.take_exam_heading', title: @user_exam.exam.title)
+    / Píldora corta + la causa al lado, no la frase entera en mayúsculas (§6.4).
+    .d-flex.align-items-center.gap-2
+      span.ps-pill.ps-pill--live = t('activerecord.user_exam.attributes.status_badge.available')
+      span.text-muted = t('activerecord.messages.exam.this_exam_is_open', date: l(@user_exam.exam.end_date, format: :short))
 
-= form_with model: @user_exam, local: true do |f|
-  - if @user_exam.errors.any?
-    .alert.alert-danger
-      h4 Errores al enviar respuestas:
-      ul
-        - @user_exam.errors.full_messages.each do |msg|
-          li = msg
+  hr
 
-  = f.fields_for :user_answers do |af|
-    - q = af.object.question
-    .mb-3
-      = af.hidden_field :id
-      = af.hidden_field :question_id
+  = form_with model: @user_exam, local: true do |f|
+    - if @user_exam.errors.any?
+      .alert.alert-danger
+        h5 = t('activerecord.user_exam.messages.submit_errors_heading')
+        ul.mb-0
+          - @user_exam.errors.full_messages.each do |msg|
+            li = msg
 
-      p
-        strong Pregunta:
-        = q.content
+    = f.fields_for :user_answers do |af|
+      - question = af.object.question
+      .card.mb-3
+        .card-body
+          = af.hidden_field :id
+          = af.hidden_field :question_id
 
-      - case q.question_type
-      - when 'text'
-        = af.check_box :text_answer_correct
-        = af.label :text_answer_correct
-        .form-group
-          = af.text_area :text_answer, rows: 3, class: 'form-control', placeholder: 'Tu respuesta'
-      - when 'single_choice'
-        .form-group
-          - q.question_options.each do |opt|
-            div.form-check
-              = radio_button_tag "user_exam[user_answers_attributes][#{af.index}][question_option_ids][]", opt.id, af.object.question_options.include?(opt), id: "answer_#{af.index}_option_#{opt.id}", class: 'form-check-input'
-              = label_tag "answer_#{af.index}_option_#{opt.id}", opt.content, class: 'form-check-label'
-      - when 'multiple_choice'
-        .form-group
-          - q.question_options.each do |opt|
-            div.form-check
-              = check_box_tag "user_exam[user_answers_attributes][#{af.index}][question_option_ids][]", opt.id, af.object.question_options.include?(opt), id: "answer_#{af.index}_option_#{opt.id}", class: 'form-check-input'
-              = label_tag "answer_#{af.index}_option_#{opt.id}", opt.content, class: 'form-check-label'
+          h5.card-title
+            - if question.scorable?
+              span.ps-pill.ps-pill--points.float-end = t('activerecord.messages.exam.points', score: question.score, count: question.score)
+            = t('activerecord.messages.exam.question_number', index: af.index + 1, content: question.content)
 
-  = f.submit "Enviar respuestas", class: 'btn btn-primary'
+          - case question.question_type
+          - when 'text'
+            .mt-3
+              = af.text_area :text_answer, rows: 3, class: 'form-control', placeholder: t('user_exams.text_answer_placeholder')
+            / La marca de corrección es del admin: `calculate_score!` suma los
+            / puntos de la pregunta cuando está a true, así que mostrársela al
+            / alumno le dejaba aprobarse su propia respuesta libre.
+            - if current_user.admin?
+              .form-check.mt-2
+                = af.check_box :text_answer_correct, class: 'form-check-input'
+                = af.label :text_answer_correct, t('activerecord.user_exam.messages.mark_as_correct'), class: 'form-check-label'
+          - when 'single_choice'
+            .mt-3
+              p.text-muted.mb-2 = t('user_exams.select_one_label')
+              - question.question_options.each do |opt|
+                .form-check
+                  = radio_button_tag "user_exam[user_answers_attributes][#{af.index}][question_option_ids][]", opt.id, af.object.question_options.include?(opt), id: "answer_#{af.index}_option_#{opt.id}", class: 'form-check-input'
+                  = label_tag "answer_#{af.index}_option_#{opt.id}", opt.content, class: 'form-check-label'
+          - when 'multiple_choice'
+            .mt-3
+              p.text-muted.mb-2 = t('user_exams.select_all_label')
+              - question.question_options.each do |opt|
+                .form-check
+                  = check_box_tag "user_exam[user_answers_attributes][#{af.index}][question_option_ids][]", opt.id, af.object.question_options.include?(opt), id: "answer_#{af.index}_option_#{opt.id}", class: 'form-check-input'
+                  = label_tag "answer_#{af.index}_option_#{opt.id}", opt.content, class: 'form-check-label'
+
+    .form-actions.mt-4
+      = f.submit t('user_exams.submit_exam_button'), class: 'btn btn-primary me-2'
+      = link_to t('actions.back'), exams_path, class: 'btn btn-secondary'

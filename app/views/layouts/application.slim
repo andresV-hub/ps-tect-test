@@ -1,11 +1,13 @@
 doctype html
-/ app/views/layouts/application.html.slim
-html
+/ app/views/layouts/application.slim
+html lang="es"
   head
-    title = content_for(:title) || "Power Solutions Technical Test"
+    title = content_for(:title) || t('navigation.brand')
     meta name="viewport" content="width=device-width,initial-scale=1"
     meta name="apple-mobile-web-app-capable" content="yes"
     meta name="mobile-web-app-capable" content="yes"
+    / Color de marca de la barra del navegador — docs/styles.md §2
+    meta name="theme-color" content="#0e3b58"
     = csrf_meta_tags
     = csp_meta_tag
 
@@ -15,17 +17,29 @@ html
     link rel="icon" href="/icon.svg" type="image/svg+xml"
     link rel="apple-touch-icon" href="/icon.png"
 
+    / Los iconos ya no vienen de un CDN: se insertan como SVG con el helper
+    / `bi_icon` desde la gema bootstrap-icons (docs/styles.md §7).
     = stylesheet_link_tag :application, "data-turbo-track": "reload"
-    link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-    = javascript_include_tag "application", "data-turbo-track": "reload", type: "module"
+    = javascript_importmap_tags
 
   body
-    = render partial: "layouts/header"
+    / El menú lateral es contextual por controlador (docs/styles.md §5): se
+    / renderiza si existe app/views/<controller>/_menu.slim. Se resuelve aquí
+    / arriba porque la navbar necesita saberlo para pintar su botón de menú.
+    - menu_partial_path = "#{controller_path}/menu"
+    - has_side_menu = user_signed_in? && lookup_context.template_exists?(menu_partial_path, [], true)
+
+    = render partial: "layouts/header", locals: { has_side_menu: has_side_menu }
 
     .main-content-wrapper
-      - menu_partial_path = "#{controller_path}/menu"
-      - if lookup_context.template_exists?(menu_partial_path, [], true)
-        aside.left-menu
+      - if has_side_menu
+        / offcanvas-lg: panel fijo a partir de `lg`, cajón deslizante por debajo
+        / (docs/styles.md §8). #appSideMenu lo consulta el data-bs-target de la
+        / navbar — no renombrar.
+        aside#appSideMenu.left-menu.offcanvas-lg.offcanvas-start tabindex="-1" aria-label=t('navigation.side_menu')
           = render partial: menu_partial_path
-      .content-area
+      / Las pantallas de Devise no tienen menú lateral y ocupaban todo el ancho:
+      / `ps-auth` las centra en una columna legible (docs/styles.md §5).
+      .content-area class=(devise_controller? ? "ps-auth" : nil)
+        = render partial: "layouts/flash"
         = yield
