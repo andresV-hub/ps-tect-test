@@ -40,7 +40,7 @@ gem "thruster", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
-gem "devise", "~> 4.2"
+gem "devise", "~> 5.0"
 gem "slim", "~> 5.1", ">= 5.1.1"
 gem "bootstrap", "~> 5.2", ">= 5.2.3"
 # El nombre del archivo de entrada (bootstrap_icons) no coincide con el de la
